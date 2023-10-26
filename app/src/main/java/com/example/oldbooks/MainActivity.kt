@@ -1,6 +1,10 @@
 package com.example.oldbooks
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +30,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        // Find the button by its ID
+        val myButton: Button = findViewById(R.id.myButton)
+
+        // Set a click listener to the button
+        myButton.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+                // Add the functionality you want when the button is clicked
+                // For example, display a toast message
+                Toast.makeText(applicationContext, "Button Clicked!", Toast.LENGTH_SHORT).show()
+                // Create an intent to switch to the new activity
+                val intent = Intent(applicationContext, PublishPost::class.java)
+                startActivity(intent)
+            }
+        })
     }
 }
 
