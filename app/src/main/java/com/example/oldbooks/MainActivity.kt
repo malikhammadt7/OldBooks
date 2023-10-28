@@ -14,11 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.oldbooks.databinding.ActivityLoginSignupBinding
 import com.example.oldbooks.ui.theme.OldBooksTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var binding: ActivityLoginSignupBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityLoginSignupBinding.inflate(layoutInflater)
+        val view = binding.root
         setContent {
             OldBooksTheme {
                 // A surface container using the 'background' color from the theme
@@ -30,17 +34,20 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        // Find the button by its ID
-        val myButton: Button = findViewById(R.id.myButton)
-
-        // Set a click listener to the button
-        myButton.setOnClickListener(object : View.OnClickListener {
+        setContentView(view)
+        binding.addPost.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 // Add the functionality you want when the button is clicked
                 // For example, display a toast message
-                Toast.makeText(applicationContext, "Button Clicked!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Button AddPost Clicked!", Toast.LENGTH_SHORT).show()
                 // Create an intent to switch to the new activity
+                val intent = Intent(applicationContext, PublishPost::class.java)
+                startActivity(intent)
+            }
+        })
+        binding.viewPost.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                Toast.makeText(applicationContext, "Button ViewPost Clicked!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(applicationContext, PublishPost::class.java)
                 startActivity(intent)
             }

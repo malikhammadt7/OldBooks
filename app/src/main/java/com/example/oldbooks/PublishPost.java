@@ -19,11 +19,10 @@ public class PublishPost extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish_post);
 
-
         postDB.setValue("Hello, World!");
     }
 
-    public void PublishPost(String title, String content, String author) {
+    public void PostIt(String title, String content, String author) {
         // Create a unique key for the new post
         String postId = postDB.push().getKey();
 
