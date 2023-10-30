@@ -7,7 +7,7 @@
     tools:context=".LoginSignup">
 
     <Button
-        android:id="@+id/addPost"
+        android:id="@+id/btnAddPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/viewPost"
+        android:id="@+id/btnViewPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -25,6 +25,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addPost" />
+        app:layout_constraintTop_toBottomOf="@+id/btnAddPost" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

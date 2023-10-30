@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         setContentView(view)
-        binding.addPost.setOnClickListener(object : View.OnClickListener {
+        binding.btnAddPost.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 // Add the functionality you want when the button is clicked
                 // For example, display a toast message
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                 startActivity(intent)
             }
         })
-        binding.viewPost.setOnClickListener(object : View.OnClickListener{
+        binding.btnViewPost.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
                 Toast.makeText(applicationContext, "Button ViewPost Clicked!", Toast.LENGTH_SHORT).show()
                 val intent = Intent(applicationContext, PublishPost::class.java)

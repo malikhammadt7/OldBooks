@@ -1,9 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".PublishPost">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="50dp"
+            android:padding="16dp">
+
+            <!-- Dropdown Spinner -->
+            <Spinner
+                android:id="@+id/dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:entries="@array/bookcategory" />
+
+            <View
+                android:id="@+id/viewseparator1"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/appcolortext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvheading2" />
+            <!-- TextView Heading -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload Image"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/appcolor1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp" />
+
+            <!-- ImageButton for Image Selection -->
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@android:drawable/ic_input_add"
+                android:contentDescription="Select Image" />
+            <!-- Container for Dynamically Added ImageButtons -->
+            <LinearLayout
+                android:id="@+id/imageButtonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            <!-- Button to Add More ImageButtons -->
+
+
+            <TextView
+                android:id="@+id/addImageButtonButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:drawableEnd="@android:drawable/ic_input_add"
+                android:drawableTint="@color/appcolor1"
+                android:gravity="center_vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="Add More Images"
+                android:textColor="@color/appcolor1"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/viewseparator2"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/appcolortext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvheading2" />
+
+
+            <!-- Text View Heading -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Book Condition"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Radio Group for "New" and "Used" Options -->
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <!-- Radio Button for "New" Option -->
+                <RadioButton
+                    android:id="@+id/radioButtonNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:paddingEnd="20dp"
+                    android:text="New" />
+
+                <!-- Radio Button for "Used" Option -->
+                <RadioButton
+                    android:id="@+id/radioButtonUsed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:text="Used" />
+            </RadioGroup>
+
+            <View
+                android:id="@+id/viewseparator3"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/appcolortext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvheading2" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginVertical="10dp">
+
+                <TextView
+                    android:id="@+id/tvheading4"
+                    android:layout_width="95dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="Set Price"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/editText"
+                    app:layout_constraintEnd_toStartOf="@+id/editText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/editText" />
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tvheading4"
+                    app:layout_constraintTop_toBottomOf="@+id/viewseparator2" />
+
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/viewseparator6"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/appcolortext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_marginVertical="10dp">
+                <TextView
+                    android:id="@+id/tvheading5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="Show my phone number on the post"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneswitch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/phoneswitch" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/phoneswitch"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvheading5"
+                    app:layout_constraintTop_toBottomOf="@+id/viewseparator3" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/viewseparator7"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/appcolortext"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+            <!-- First EditText -->
+            <EditText
+                android:id="@+id/txtBookName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:hint="First EditText"
+                android:inputType="text" />
+
+            <!-- Second EditText -->
+            <EditText
+                android:id="@+id/txtBookAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:hint="Second EditText"
+                android:inputType="text" />
+
+            <!-- Description EditText (multi-line) -->
+            <EditText
+                android:id="@+id/txtPostDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description (multi-line)"
+                android:layout_marginHorizontal="20dp"
+                android:inputType="textMultiLine"
+                android:lines="6" /> <!-- Set the number of visible lines here -->
+
+            <!-- Button -->
+            <Button
+                android:id="@+id/btnPublish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Post" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
