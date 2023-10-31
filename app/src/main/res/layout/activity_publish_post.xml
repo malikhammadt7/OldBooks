@@ -222,7 +222,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:hint="First EditText"
+                android:hint="Book Name"
                 android:inputType="text" />
 
             <!-- Second EditText -->
@@ -231,7 +231,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:hint="Second EditText"
+                android:hint="Author Name"
                 android:inputType="text" />
 
             <!-- Description EditText (multi-line) -->
@@ -239,7 +239,7 @@
                 android:id="@+id/txtPostDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description (multi-line)"
+                android:hint="Book Description"
                 android:layout_marginHorizontal="20dp"
                 android:inputType="textMultiLine"
                 android:lines="6" /> <!-- Set the number of visible lines here -->
