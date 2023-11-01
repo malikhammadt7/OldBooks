@@ -45,40 +45,38 @@
                 android:textColor="@color/appcolor1"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp" />
-
-            <!-- ImageButton for Image Selection -->
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@android:drawable/ic_input_add"
-                android:contentDescription="Select Image" />
-            <!-- Container for Dynamically Added ImageButtons -->
-            <LinearLayout
-                android:id="@+id/imageButtonContainer"
+            <GridLayout
+                android:id="@+id/gridLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-            <!-- Button to Add More ImageButtons -->
+                android:layout_height="match_parent"
+                android:columnCount="2"
+                android:padding="16dp">
+                <ImageView
+                    android:id="@+id/firstImageView"
+                    android:minWidth="150dp"
+                    android:maxWidth="150dp"
+                    android:minHeight="150dp"
+                    android:maxHeight="150dp"
+                    android:src="@android:drawable/ic_input_add"
+                    android:contentDescription="Add Image"
+                    android:clickable="true"/>
+            </GridLayout>
 
-
-            <TextView
-                android:id="@+id/addImageButtonButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:drawableEnd="@android:drawable/ic_input_add"
-                android:drawableTint="@color/appcolor1"
-                android:gravity="center_vertical"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:text="Add More Images"
-                android:textColor="@color/appcolor1"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+<!--            <TextView-->
+<!--                android:id="@+id/addImageButtonButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:drawableEnd="@android:drawable/ic_input_add"-->
+<!--                android:drawableTint="@color/appcolor1"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:paddingStart="8dp"-->
+<!--                android:paddingEnd="8dp"-->
+<!--                android:text="Add More Images"-->
+<!--                android:textColor="@color/appcolor1"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textStyle="bold" />-->
 
             <View
                 android:id="@+id/viewseparator2"

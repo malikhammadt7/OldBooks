@@ -16,9 +16,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -52,9 +55,11 @@ public class PublishPost extends AppCompatActivity {
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     StorageReference postImgDB = storageRef.child("postImgs");
 
-    private ImageButton lastClickedImgBtn;
+    private ImageView lastClickedImgBtn;
     private List<String> selectedImageUrls = new ArrayList<>();
 
+    private int maxImageViews = 6;
+    private int currentImageViews = 1;
 // endregion
 
 
@@ -65,22 +70,6 @@ public class PublishPost extends AppCompatActivity {
         setContentView(act_binding.getRoot());
         postDB.setValue("Hello, World!");
 
-        act_binding.addImageButtonButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Create a new ImageButton and add it to the container
-                // Commented on purpose
-                //createAndAddNewButton();
-            }
-        });
-        act_binding.imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Create a new ImageButton and add it to the container
-                lastClickedImgBtn = (ImageButton) view;
-                pickImage(view);
-            }
-        });
         act_binding.btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,8 +77,52 @@ public class PublishPost extends AppCompatActivity {
                 PostIt();
             }
         });
+
+        act_binding.firstImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lastClickedImgBtn = (ImageView) view;
+                pickImage(view);
+            }
+        });
     }
 
+    private void createNewImageView() {
+        if (currentImageViews < maxImageViews) {
+            ImageView newImageView = new ImageView(this);
+            // Maximum number of ImageView you want to allow
+            int imagesPerColumn = 2; // Number of images you want to display per column
+            int totalColumns = maxImageViews / imagesPerColumn; // Calculate the number of columns needed
+
+            ImageView imageView = new ImageView(this); // Create a new ImageView
+            imageView.setLayoutParams(new GridLayout.LayoutParams()); // Set layout parameters
+
+            GridLayout.Spec rowSpec = GridLayout.spec(currentImageViews / imagesPerColumn); // Calculate the row position
+            GridLayout.Spec colSpec = GridLayout.spec(currentImageViews % imagesPerColumn); // Calculate the column position
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, colSpec);
+            params.setMargins(0 ,5,0,5);
+            params.setGravity(Gravity.FILL);
+            // Set width and height to match the existing ImageView
+            params.height = act_binding.firstImageView.getMinimumWidth();
+            params.height = act_binding.firstImageView.getMinimumHeight();// Adjust the height as needed
+
+            newImageView.setLayoutParams(params);
+
+            newImageView.setImageResource(android.R.drawable.ic_input_add);
+            newImageView.setTag(currentImageViews);
+
+            newImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    lastClickedImgBtn = (ImageView) v;
+                    pickImage(v);
+                }
+            });
+
+            act_binding.gridLayout.addView(newImageView);
+            currentImageViews++;
+        }
+    }
     public void PostIt() {
         // Create a unique key for the new post
         String postId = postDB.push().getKey();
@@ -98,7 +131,6 @@ public class PublishPost extends AppCompatActivity {
             Toast.makeText(this, "Not Everything is filled", Toast.LENGTH_SHORT).show();
             return;
         }
-
         postImgDB.child("/" + postId).putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Image upload was successful. Now, get the download URL of the image.
@@ -137,14 +169,6 @@ public class PublishPost extends AppCompatActivity {
                 });
     }
 
-    private void createAndAddNewButton() {
-        ImageButton newButton = new ImageButton(this);
-        newButton.setLayoutParams(new LinearLayout.LayoutParams(
-                100, 100));
-        newButton.setImageResource(android.R.drawable.ic_input_add);
-        newButton.setContentDescription("Select Image");
-        act_binding.imageButtonContainer.addView(newButton, act_binding.imageButtonContainer.getChildCount() - 1);
-    }
     private Post PopulatePostData() {
         Post post = new Post();
         // Populate the currentPost object
@@ -220,10 +244,19 @@ public class PublishPost extends AppCompatActivity {
             try {
                 // Convert the URI to a Bitmap (you can adjust the size as needed)
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
 
                 // Set the selected image as the src of the ImageButton
-                lastClickedImgBtn.setImageBitmap(bitmap);
+                lastClickedImgBtn.setImageBitmap(resizedBitmap);
                 selectedImageUrls.add(imageUri.toString());
+                lastClickedImgBtn.setOnClickListener(null);
+                lastClickedImgBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(view.getContext(), "The Work is done here", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                createNewImageView();
             } catch (Exception e) {
                 e.printStackTrace();
             }
