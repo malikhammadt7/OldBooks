@@ -16,14 +16,14 @@ public class Book {
 
     private String bookId;
     private String title;
-    private String author;
+    private List<String> author;
     private String isbn;
     private int publicationYear;
     private String genre;
     private int pageCount;
     private double price;
     private List<String> keywords;
-    private String coverImgUrl; // URL or file path to the book's cover image
+    private String coverImgUrl;
     private String description;
     private String publisher;
     private String language;

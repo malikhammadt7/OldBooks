@@ -222,16 +222,37 @@
                 android:layout_marginHorizontal="20dp"
                 android:hint="Book Name"
                 android:inputType="text" />
-
-            <!-- Second EditText -->
-            <EditText
-                android:id="@+id/txtBookAuthor"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="20dp"
-                android:hint="Author Name"
-                android:inputType="text" />
+                android:orientation="horizontal">
 
+                <!-- Second EditText -->
+                <EditText
+                    android:id="@+id/txtBookAuthor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Author Name"
+                    android:layout_gravity="start|center_vertical"
+                    android:inputType="text"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/addAuthor"
+                    android:minWidth="50dp"
+                    android:maxWidth="50dp"
+                    android:minHeight="50dp"
+                    android:maxHeight="50dp"
+                    android:src="@android:drawable/ic_input_add"
+                    android:contentDescription="Add Image"
+                    android:clickable="true"
+                    android:layout_height="50dp"
+                    android:layout_width="50dp"
+                    android:layout_gravity="end|center_vertical" />
+            </LinearLayout>
             <!-- Description EditText (multi-line) -->
             <EditText
                 android:id="@+id/txtPostDesc"
@@ -240,8 +261,17 @@
                 android:hint="Book Description"
                 android:layout_marginHorizontal="20dp"
                 android:inputType="textMultiLine"
+                android:gravity="top|start"
                 android:lines="6" /> <!-- Set the number of visible lines here -->
 
+            <!-- Second EditText -->
+            <EditText
+                android:id="@+id/txtISBN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:hint="Book ISBN (Optional)"
+                android:inputType="number" />
             <!-- Button -->
             <Button
                 android:id="@+id/btnPublish"

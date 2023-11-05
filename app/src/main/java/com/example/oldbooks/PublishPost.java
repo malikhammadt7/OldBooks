@@ -27,6 +27,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.oldbooks.databinding.ActivityPublishPostBinding;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -54,7 +61,6 @@ public class PublishPost extends AppCompatActivity {
     DatabaseReference postDB = db.getReference("post");
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     StorageReference postImgDB = storageRef.child("postImgs");
-
     private ImageView lastClickedImgBtn;
     private List<String> selectedImageUrls = new ArrayList<>();
 
@@ -62,13 +68,13 @@ public class PublishPost extends AppCompatActivity {
     private int currentImageViews = 1;
 // endregion
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         act_binding = ActivityPublishPostBinding.inflate(getLayoutInflater());
         setContentView(act_binding.getRoot());
         postDB.setValue("Hello, World!");
+
 
         act_binding.btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
