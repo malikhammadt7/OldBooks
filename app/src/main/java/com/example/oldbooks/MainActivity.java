@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.customadspackage.GoogleAdMobManager;
-import com.example.oldbooks.databinding.ActivityLoginSignupBinding;
 import com.example.oldbooks.databinding.ActivityMainBinding;
 import com.example.oldbooks.manager.CoinManager;
 
@@ -49,11 +49,19 @@ public class MainActivity extends AppCompatActivity {
                 GoogleAdMobManager.getInstance().ShowRewardedAd(MainActivity.this, addCoinsCallback);
             }
         });
+        act_binding.btnShowRewardInterAd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "btnShowRewardInterAd clicked");
+                GoogleAdMobManager.getInstance().ShowRewardedInterstitialAd(MainActivity.this, addCoinsCallback);
+            }
+        });
         addCoinsCallback = new Runnable() {
             @Override
             public void run() {
                 //AppController.getInstance().getManager(CoinManager.class).addCoins(10);
                 Log.d(TAG, "give addCoins(10)");
+                Toast.makeText(activity, "Reward Given: +10 coins", Toast.LENGTH_SHORT).show();
             }
         };
     }

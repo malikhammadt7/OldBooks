@@ -1,6 +1,7 @@
 package com.example.oldbooks;
 
 import com.example.oldbooks.manager.CoinManager;
+import com.example.oldbooks.manager.FirebaseManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,8 @@ public class AppController {
         return instance;
     }
     private AppController() {
-        addManager(CoinManager.class, new CoinManager(""));
+        addManager(FirebaseManager.class, new FirebaseManager());
+        addManager(CoinManager.class, new CoinManager());
     }
 
     private Map<Class<?>, Manager> managerMap = new HashMap<>();

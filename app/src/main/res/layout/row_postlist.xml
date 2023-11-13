@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="126dp">
+
+    <ImageView
+        android:id="@+id/imgpost"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        tools:srcCompat="@drawable/icon_book"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginVertical="3dp"/>
+
+    <ImageView
+        android:id="@+id/imgfeatured"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        tools:srcCompat="@drawable/ic_launcher_background"
+        android:scaleType="center"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/posttitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/favorite"
+        android:layout_toEndOf="@+id/imgpost"
+        android:maxLines="2"
+        android:textColor="@color/black"
+        android:text="BookName BookName BookName BookName BookName BookName BookName BookName "
+        android:textSize="14dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/favorite"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        tools:srcCompat="@drawable/icon_starfilled" />
+
+    <ImageView
+        android:id="@+id/notfavorite"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        tools:srcCompat="@drawable/icon_staroutline" />
+
+    <ImageView
+        android:id="@+id/iconlocation"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_below="@+id/posttitle"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/imgpost"
+        android:scaleType="fitCenter"
+        tools:srcCompat="@drawable/icon_location" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iconlocation"
+        android:layout_alignBottom="@+id/iconlocation"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toEndOf="@+id/iconlocation"
+        android:layout_alignParentEnd="true"
+        android:gravity="bottom"
+        android:maxLines="1"
+        android:text="location, location"
+        android:textSize="14dp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:maxLines="1"
+        android:gravity="bottom"
+        android:textAlignment="gravity"
+        android:text="Rs 2000"
+        android:textSize="20dp"
+        android:textColor="@color/appcolor1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="8dp"
+        android:layout_toEndOf="@+id/imgpost"
+        android:maxLines="1"
+        android:text="Today"
+        android:textSize="14dp" />
+
+</RelativeLayout>

@@ -178,7 +178,7 @@ public class PublishPost extends AppCompatActivity {
     private Post PopulatePostData() {
         Post post = new Post();
         // Populate the currentPost object
-        post.setBookName(act_binding.txtBookName.getText().toString());
+        post.setPostTitle(act_binding.txtBookName.getText().toString());
 
         // Handle image button click to set image URLs in imageURLs array (assuming you are storing URLs)
         // You should implement this part based on your image selection logic.

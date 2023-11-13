@@ -73,4 +73,6 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
     implementation 'com.google.android.gms:play-services-ads:22.5.0'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

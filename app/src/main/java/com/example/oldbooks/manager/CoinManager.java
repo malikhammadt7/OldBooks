@@ -12,14 +12,23 @@ import com.google.firebase.database.ValueEventListener;
 
 public class CoinManager extends Manager{
 
+    //region Attributes
     private final String TAG = "CoinManager";
     private int totalCoins;
     private DatabaseReference databaseReference;
+    //endregion Attributes
 
+    //region Singleton
+    //endregion Singleton
+
+
+    public CoinManager() {
+    }
     public CoinManager(String userId) {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("totalCoins");
         Initialize();
     }
+
     @Override
     public void Initialize() {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

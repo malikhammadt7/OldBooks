@@ -30,10 +30,10 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.coin = coin;
-        Country = country;
-        Province = province;
-        City = city;
-        Town = town;
+        this.Country = country;
+        this.Province = province;
+        this.City = city;
+        this.Town = town;
         this.joinedDate = joinedDate;
         this.profileImg = profileImg;
         this.phoneNumber = phoneNumber;

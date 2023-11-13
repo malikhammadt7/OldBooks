@@ -3,17 +3,17 @@ package com.example.oldbooks;
 import android.content.Context;
 
 public abstract class Manager {
+
+    //region Attributes
     private boolean isInitialized;
-
-    public boolean isInitialized() {
-        return isInitialized;
-    }
-
     public void setInitialized(boolean initialized) {
         isInitialized = initialized;
     }
-
-    public Manager() {
+    public boolean isInitialized() {
+        return isInitialized;
     }
+    //region Attributes
+
     public abstract void Initialize();
+
 }
