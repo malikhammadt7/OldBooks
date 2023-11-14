@@ -39,6 +39,7 @@ public class CoinManager extends Manager{
                 } else {
                     totalCoins = 0;
                 }
+                return null;
             }
             @Override
             public void onCancelled(DatabaseError databaseError) { }

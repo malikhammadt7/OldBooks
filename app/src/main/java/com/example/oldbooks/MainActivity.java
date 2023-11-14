@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.customadspackage.GoogleAdMobManager;
 import com.example.oldbooks.databinding.ActivityMainBinding;
-import com.example.oldbooks.manager.CoinManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d(TAG, "btnShowRewardInterAd clicked");
                 GoogleAdMobManager.getInstance().ShowRewardedInterstitialAd(MainActivity.this, addCoinsCallback);
+            }
+        });
+        act_binding.btnDailyReward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "btnDailyReward clicked");
+                startActivity(new Intent(activity, DailyRewards.class));
             }
         });
         addCoinsCallback = new Runnable() {

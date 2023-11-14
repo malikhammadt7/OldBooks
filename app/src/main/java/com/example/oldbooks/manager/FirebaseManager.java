@@ -3,6 +3,7 @@ package com.example.oldbooks.manager;
 import androidx.annotation.NonNull;
 
 import com.example.oldbooks.Manager;
+import com.example.oldbooks.Post;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,9 +39,7 @@ public class FirebaseManager extends Manager {
         DBUserPath.child("favPostId").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Handle the data
                 if (dataSnapshot.exists()) {
-                    // Assuming favPostId is a list of strings
                     favPostIds = (List<String>) dataSnapshot.getValue();
                 }
             }
@@ -72,6 +71,5 @@ public class FirebaseManager extends Manager {
             }
         }
     }
-
 
 }

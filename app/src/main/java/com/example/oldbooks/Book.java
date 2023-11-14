@@ -35,9 +35,7 @@ public class Book {
         for (int i = 0; i < 14; i++) {
             randomComponent.append(characters.charAt(random.nextInt(characters.length())));
         }
-
         String bookId = randomComponent.toString();
-
         if (bookId.length() > 14) {
             bookId = bookId.substring(0, 14);
         } else if (bookId.length() < 14) {
@@ -60,10 +58,8 @@ public class Book {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle database error, if needed
             }
         });
-
-        return isUnique[0]; // Return the result (true if unique, false if not)
+        return isUnique[0];
     }
 }

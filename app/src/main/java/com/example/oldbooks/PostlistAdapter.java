@@ -1,8 +1,10 @@
 package com.example.oldbooks;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,10 +23,11 @@ import java.util.List;
 public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapter.CustomViewHolder> {
 
     public List<String> favposts = new ArrayList<>();
+    Intent intent;
+
     public PostlistAdapter(@NonNull FirebaseRecyclerOptions<Post> options) {
         super(options);
         favposts = (List<String>) AppController.getInstance().getManager(FirebaseManager.class).onlyFeaturedPosts();
-
     }
     @Override
     protected void onBindViewHolder(@NonNull CustomViewHolder holder, int position, @NonNull Post model) {
@@ -72,6 +75,12 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
             holder.rowBinding.favorite.setVisibility(View.INVISIBLE);
             holder.rowBinding.notfavorite.setVisibility(View.VISIBLE);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openItemDetails(view, model.getPostId());
+            }
+        });
     }
 
     public boolean isFavPost(@NonNull String postId){
@@ -80,6 +89,13 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
                 return true;
         }
         return false;
+    }
+
+    public void openItemDetails(View view, @NonNull String postId) {
+
+        intent = new Intent(view.getContext(),PostDetails.class);
+        intent.putExtra("postid", postId);
+        view.getContext().startActivity(intent);
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
