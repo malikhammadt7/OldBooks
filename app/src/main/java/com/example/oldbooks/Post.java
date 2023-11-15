@@ -16,10 +16,11 @@ public class Post {
     private String description;
     private Enums.BookCondition bookCondition;
     private boolean contactVisible;
+    private boolean featured;
 
     public Post() {}
 
-    public Post(String postId, String publisherId, String postTitle, Enums.BookCategory bookCategory, String location, int price, String date, List<String> imageURLs, String author, String description, Enums.BookCondition bookCondition, boolean contactVisible) {
+    public Post(String postId, String publisherId, String postTitle, Enums.BookCategory bookCategory, String location, int price, String date, List<String> imageURLs, String author, String description, Enums.BookCondition bookCondition, boolean contactVisible, boolean featured) {
         this.postId = postId;
         this.publisherId = publisherId;
         this.postTitle = postTitle;
@@ -32,6 +33,7 @@ public class Post {
         this.description = description;
         this.bookCondition = bookCondition;
         this.contactVisible = contactVisible;
+        this.featured = featured;
     }
 
     public String getPostId() {
@@ -101,5 +103,11 @@ public class Post {
     }
     public void setContactVisible(boolean contactVisible) {
         this.contactVisible = contactVisible;
+    }
+    public boolean isFeatured() {
+        return featured;
+    }
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 }

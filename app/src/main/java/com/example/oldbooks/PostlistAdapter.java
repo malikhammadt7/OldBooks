@@ -27,7 +27,7 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
 
     public PostlistAdapter(@NonNull FirebaseRecyclerOptions<Post> options) {
         super(options);
-        favposts = (List<String>) AppController.getInstance().getManager(FirebaseManager.class).onlyFeaturedPosts();
+        favposts = (List<String>) AppController.getInstance().getManager(FirebaseManager.class).getFavPosts();
     }
     @Override
     protected void onBindViewHolder(@NonNull CustomViewHolder holder, int position, @NonNull Post model) {

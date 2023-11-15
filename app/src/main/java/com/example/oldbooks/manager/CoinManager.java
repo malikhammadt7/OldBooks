@@ -25,7 +25,8 @@ public class CoinManager extends Manager{
     public CoinManager() {
     }
     public CoinManager(String userId) {
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("totalCoins");
+//        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("totalCoins");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child("dummyuser").child("totalCoins");
         Initialize();
     }
 
@@ -39,7 +40,6 @@ public class CoinManager extends Manager{
                 } else {
                     totalCoins = 0;
                 }
-                return null;
             }
             @Override
             public void onCancelled(DatabaseError databaseError) { }

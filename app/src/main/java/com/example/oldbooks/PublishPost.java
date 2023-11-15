@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -27,6 +29,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.oldbooks.databinding.ActivityPublishPostBinding;
+import com.example.oldbooks.databinding.DialogConfirmfeaturedpostBinding;
+import com.example.oldbooks.manager.CoinManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
@@ -80,7 +84,7 @@ public class PublishPost extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Create a new ImageButton and add it to the container
-                PostIt();
+                Proceed();
             }
         });
 
@@ -129,14 +133,10 @@ public class PublishPost extends AppCompatActivity {
             currentImageViews++;
         }
     }
-    public void PostIt() {
+    public void PostIt(boolean feature) {
         // Create a unique key for the new post
         String postId = postDB.push().getKey();
 
-        if(AnythingNull()){
-            Toast.makeText(this, "Not Everything is filled", Toast.LENGTH_SHORT).show();
-            return;
-        }
         postImgDB.child("/" + postId).putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Image upload was successful. Now, get the download URL of the image.
@@ -146,6 +146,7 @@ public class PublishPost extends AppCompatActivity {
                                 selectedImageUrls.add(uri.toString());
                                 // Save the imageUrl to the Realtime Database.
                                 Post post = PopulatePostData();
+                                post.setFeatured(feature);
                                 post.setImageURLs(selectedImageUrls);
                                 // Push the post to the database under the generated key
                                 postDB.child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -173,6 +174,18 @@ public class PublishPost extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     // Handle any errors while uploading the image.
                 });
+    }
+
+    public void Proceed()
+    {
+        if(AnythingNull())
+        {
+            Toast.makeText(this, "Not Everything is filled", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            showFeaturedDialog();
+        }
     }
 
     private Post PopulatePostData() {
@@ -288,6 +301,62 @@ public class PublishPost extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         }
+    }
+
+
+    private DialogConfirmfeaturedpostBinding dialogBinding;
+    private AlertDialog alertDialog;
+    private void showFeaturedDialog() {
+
+        dialogBinding = DialogConfirmfeaturedpostBinding.inflate(LayoutInflater.from(this));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false); // Set the dialog to be non-cancelable
+
+        // Inflate your custom layout for the dialog
+        View view = getLayoutInflater().inflate(R.layout.dialog_confirmfeaturedpost, null);
+        builder.setView(dialogBinding.getRoot());
+
+
+        dialogBinding.dialogtxt.setText("Do you want to spend 5 coins to feature your post?");
+
+        // Set actions for the positive button
+        dialogBinding.btnconfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                do it after adding user work
+
+//                CoinManager coinManager = AppController.getInstance().getManager(CoinManager.class);
+//                if(coinManager.getTotalCoins() >= 5){
+//                    coinManager.deductCoins(5);
+//                    Toast.makeText(getApplicationContext(), "coinManager.deductCoins(5)",Toast.LENGTH_LONG);
+//
+//                    alertDialog.dismiss();
+//                }else{
+//                    alertDialog.dismiss();
+//                    Toast.makeText(getApplicationContext(), "Not Enough Coins",Toast.LENGTH_LONG);
+//                }
+                PostIt(true);
+            }
+        });
+
+        // Set actions for the negative button
+        dialogBinding.btnreject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PostIt(false);
+                alertDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Posted",Toast.LENGTH_LONG);
+
+            }
+        });
+
+        // Create the dialog
+        alertDialog = builder.create();
+
+        // Show the dialog
+        alertDialog.show();
     }
 
 }

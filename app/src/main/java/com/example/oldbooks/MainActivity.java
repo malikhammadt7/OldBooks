@@ -34,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(activity,PublishPost.class));
             }
         });
-        act_binding.btnAddPost.setOnClickListener(new View.OnClickListener() {
+        act_binding.btnViewPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "AddPost Clicked");
-                startActivity(new Intent(activity,PublishPost.class));
+                startActivity(new Intent(activity, PostList.class));
             }
         });
         act_binding.btnShowRewardAd.setOnClickListener(new View.OnClickListener() {
