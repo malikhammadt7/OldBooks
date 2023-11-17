@@ -26,7 +26,6 @@ public class DailyRewards extends AppCompatActivity {
 
     private ActivityDailyRewardsBinding actBinding;
     private final String TAG = "DailyRewards";
-
     private static final String PREF_NAME = "DailyRewardPrefs";
     private static final String KEY_LAST_LOGIN_DATE = "lastLoginDate";
     private static final String KEY_CONSECUTIVE_LOGINS = "consecutiveLogins";
@@ -112,11 +111,11 @@ public class DailyRewards extends AppCompatActivity {
 
     public void RedrawRewards(int day){
         for (int i = 0; i < MAX_CONSECUTIVE_DAYS; i++) {
-            rewardImages[i].setImageResource(R.drawable.ic_launcher_background);
+            rewardImages[i].setImageResource(R.drawable.giftpng);
         }
         if(!rewardClaimed)
         {
-            rewardImages[day].setImageResource(R.drawable.icon_book);
+            rewardImages[day].setImageResource(R.drawable.gift_get);
             actBinding.btnclaimreward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

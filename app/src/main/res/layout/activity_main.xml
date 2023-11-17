@@ -6,17 +6,112 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-        <Button
-            android:id="@+id/btnAddPost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            android:text="Add Post"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:width="360dp"
+        android:height="69dp"
+        android:background="@drawable/top_screen_round"
+        android:viewportWidth="360"
+        android:viewportHeight="69"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+    <SearchView
+        android:id="@+id/searchview"
+        android:layout_width="249dp"
+        android:layout_height="42dp"
+        android:background="@drawable/search_round"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Here ..."
+        app:layout_constraintBottom_toBottomOf="@+id/top"
+        app:layout_constraintEnd_toEndOf="@+id/top"
+        app:layout_constraintStart_toStartOf="@+id/top"
+        app:layout_constraintTop_toTopOf="@+id/top" />
+
+    <View
+        android:id="@+id/homeView"
+        android:layout_width="match_parent"
+        android:layout_height="106dp"
+        android:layout_below="@+id/searchview"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="44dp"
+        android:background="#D9D9D9"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddPost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top" />
+
+    <TextView
+        android:id="@+id/your_coins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal|top"
+        android:text="Your coins"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/homeView"
+        app:layout_constraintEnd_toStartOf="@+id/btnDailyReward"
+        app:layout_constraintHorizontal_bias="0.19"
+        app:layout_constraintStart_toStartOf="@+id/homeView"
+        app:layout_constraintTop_toBottomOf="@+id/coins"
+        app:layout_constraintVertical_bias="0.309" />
+
+    <TextView
+        android:id="@+id/coins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal|top"
+        android:text="0"
+        android:textColor="@color/black"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnDailyReward"
+        app:layout_constraintEnd_toStartOf="@+id/profileIcon"
+        app:layout_constraintHorizontal_bias="0.119"
+        app:layout_constraintStart_toStartOf="@+id/homeView"
+        app:layout_constraintTop_toTopOf="@+id/homeView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/profileIcon"
+        android:layout_width="70dp"
+        android:layout_height="59dp"
+        android:layout_below="@+id/searchview"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:contextClickable="true"
+        android:src="@drawable/profile_icon"
+        app:layout_constraintBottom_toTopOf="@+id/btnDailyReward"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.889"
+        app:layout_constraintStart_toEndOf="@+id/your_coins"
+        app:layout_constraintTop_toTopOf="@+id/homeView" />
+
+    <Button
+        android:id="@+id/btnAddPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Add Post"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/homeView" />
+
+    <Button
             android:id="@+id/btnViewPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,10 +148,11 @@
         android:id="@+id/btnDailyReward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="DailyReward"
+        android:text="Tap to Get Coins"
+        app:layout_constraintBottom_toBottomOf="@+id/homeView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnShowRewardInterAd" />
+        app:layout_constraintTop_toTopOf="@+id/homeView"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

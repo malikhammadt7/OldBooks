@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Element 1: Bottom Left Rounded Corner -->
+    <item android:id="@+id/rectangle_6">
+        <shape>
+            <corners
+                android:radius="10dp"
+                />
+            <solid android:color="@color/white" /> <!-- Change color as desired -->
+        </shape>
+    </item>
+</selector>

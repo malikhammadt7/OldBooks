@@ -5,4 +5,7 @@
         <item>General</item>
         <item>Academic</item>
     </string-array>
+
+    <string name="reward">Today\'s reward is ready</string>
+    <string name="dontforget">Don’t  miss a day or you have to start over again</string>
 </resources>
