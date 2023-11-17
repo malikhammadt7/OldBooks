@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Activity activity;
     private final String TAG = "MainActivity";
     Runnable addCoinsCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

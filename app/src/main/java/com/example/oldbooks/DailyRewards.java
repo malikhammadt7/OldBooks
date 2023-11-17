@@ -26,6 +26,7 @@ public class DailyRewards extends AppCompatActivity {
 
     private ActivityDailyRewardsBinding actBinding;
     private final String TAG = "DailyRewards";
+
     private static final String PREF_NAME = "DailyRewardPrefs";
     private static final String KEY_LAST_LOGIN_DATE = "lastLoginDate";
     private static final String KEY_CONSECUTIVE_LOGINS = "consecutiveLogins";
