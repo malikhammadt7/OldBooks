@@ -1,17 +1,18 @@
-package com.example.oldbooks;
+package com.example.oldbooks.adapter;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.oldbooks.AppController;
+import com.example.oldbooks.Post;
+import com.example.oldbooks.PostDetails;
 import com.example.oldbooks.databinding.RowPostlistBinding;
 import com.example.oldbooks.manager.FirebaseManager;
-import com.example.oldbooks.manager.UserManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.squareup.picasso.Picasso;
@@ -93,7 +94,7 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
 
     public void openItemDetails(View view, @NonNull String postId) {
 
-        intent = new Intent(view.getContext(),PostDetails.class);
+        intent = new Intent(view.getContext(), PostDetails.class);
         intent.putExtra("postid", postId);
         view.getContext().startActivity(intent);
     }

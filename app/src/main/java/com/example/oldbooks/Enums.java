@@ -9,4 +9,9 @@ public class Enums {
         ACADEMIC,
         GENERAL
     }
+    enum UserStatus {
+        ACTIVE,
+        NONACTIVE,
+        SUSPENDED,
+    }
 }

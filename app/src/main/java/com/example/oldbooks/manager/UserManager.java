@@ -13,15 +13,15 @@ public class UserManager extends Manager {
     public void setUserId(String userId) {
         UserId = userId;
     }
-    //region Attributes
+    //endregion Attributes
 
     //region Singleton
-    //region Singleton
+    //endregion Singleton
 
     //region Methods
     @Override
     public void Initialize() {
 
     }
-    //region Methods
+    //endregion Methods
 }

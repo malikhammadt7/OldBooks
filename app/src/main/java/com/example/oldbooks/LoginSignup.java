@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.customadspackage.GoogleAdMobManager;
 import com.example.oldbooks.databinding.ActivityLoginSignupBinding;
 import com.example.oldbooks.manager.CoinManager;
+import com.example.oldbooks.manager.FirebaseManager;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -40,12 +41,6 @@ public class LoginSignup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         act_binding = ActivityLoginSignupBinding.inflate(getLayoutInflater());
         setContentView(act_binding.getRoot());
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-                LoadRewardedAd();
-            }
-        });
 
         act_binding.btnShowRewardAd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,97 +57,6 @@ public class LoginSignup extends AppCompatActivity {
         };
     }
 
-
-    private RewardedAd rewardedAd;
-    boolean isLoading;
-    public void LoadRewardedAd(){
-        if (rewardedAd == null) {
-            isLoading = true;
-            AdRequest adRequest = new AdRequest.Builder().build();
-            RewardedAd.load(
-                    this,
-                    AD_UNIT_ID,
-                    adRequest,
-                    new RewardedAdLoadCallback() {
-                        @Override
-                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                            // Handle the error.
-                            Log.d(TAG, loadAdError.getMessage());
-                            rewardedAd = null;
-                            LoginSignup.this.isLoading = false;
-                            Toast.makeText(LoginSignup.this, "onAdFailedToLoad", Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
-                        public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-                            LoginSignup.this.rewardedAd = rewardedAd;
-                            Log.d(TAG, "onAdLoaded");
-                            LoginSignup.this.isLoading = false;
-                            Toast.makeText(LoginSignup.this, "onAdLoaded", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-        else
-        {
-            Log.d(TAG, "rewardedAd == null");
-        }
-    }
-
-    public void ShowRewardedAd()
-    {
-        Log.d(TAG, "into ShowRewardedAd()");
-        if (rewardedAd != null) {
-            Activity activityContext = LoginSignup.this;
-            rewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
-                @Override
-                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                    // Handle the reward.
-                    Log.d(TAG, "The user earned the reward.");
-                    int rewardAmount = rewardItem.getAmount();
-                    String rewardType = rewardItem.getType();
-                }
-            });
-            SetContentCallBacks();
-            LoadRewardedAd();
-        } else {
-            Log.d(TAG, "The rewarded ad wasn't ready yet.");
-        }
-    }
-    public void SetContentCallBacks()
-    {
-        rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-        @Override
-        public void onAdClicked() {
-            // Called when a click is recorded for an ad.
-            Log.d(TAG, "Ad was clicked.");
-        }
-        @Override
-        public void onAdDismissedFullScreenContent() {
-            // Called when ad is dismissed.
-            // Set the ad reference to null so you don't show the ad a second time.
-            Log.d(TAG, "Ad dismissed fullscreen content.");
-            rewardedAd = null;
-            LoadRewardedAd(); // Reload the ad here
-        }
-        @Override
-        public void onAdFailedToShowFullScreenContent(AdError adError) {
-            // Called when ad fails to show.
-            Log.e(TAG, "Ad failed to show fullscreen content.");
-            rewardedAd = null;
-        }
-        @Override
-        public void onAdImpression() {
-            // Called when an impression is recorded for an ad.
-            Log.d(TAG, "Ad recorded an impression.");
-        }
-        @Override
-        public void onAdShowedFullScreenContent() {
-            // Called when ad is shown.
-            Log.d(TAG, "Ad showed fullscreen content.");
-        }
-    });
-    }
-
 // endregion
-
 
 }

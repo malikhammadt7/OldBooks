@@ -1,15 +1,15 @@
 package com.example.oldbooks;
 
-import androidx.annotation.NonNull;
-
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
 
     private String userId;
     private String username;
     private String firstName;
     private String lastName;
+    private String password;
     private String email;
     private int coin;
     private String Country;
@@ -20,14 +20,16 @@ public class User {
     private String profileImg;
     private String phoneNumber;
     private List<String> favPostId;
+    private Enums.UserStatus userStatus;
 
     public User() {}
 
-    public User(String userId, String username, String firstName, String lastName, String email, int coin, String country, String province, String city, String town, String joinedDate, String profileImg, String phoneNumber, List<String> favPostId) {
+    public User(String userId, String username, String firstName, String lastName, String password, String email, int coin, String country, String province, String city, String town, String joinedDate, String profileImg, String phoneNumber, List<String> favPostId, Enums.UserStatus userStatus) {
         this.userId = userId;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.email = email;
         this.coin = coin;
         this.Country = country;
@@ -38,6 +40,7 @@ public class User {
         this.profileImg = profileImg;
         this.phoneNumber = phoneNumber;
         this.favPostId = favPostId;
+        this.userStatus = userStatus;
     }
 
     public String getUserId() {
@@ -123,5 +126,17 @@ public class User {
     }
     public void setFavPostId(List<String> favPostId) {
         this.favPostId = favPostId;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public Enums.UserStatus getUserStatus() {
+        return userStatus;
+    }
+    public void setUserStatus(Enums.UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }
