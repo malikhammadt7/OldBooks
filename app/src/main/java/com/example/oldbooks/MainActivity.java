@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
     private FirebaseManager firebaseManager;
     Runnable addCoinsCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
