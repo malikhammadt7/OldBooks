@@ -34,6 +34,7 @@ public class LoginSignup extends AppCompatActivity {
 // endregion
 
     Runnable addCoinsCallback;
+
 //region Methods
 
     @Override

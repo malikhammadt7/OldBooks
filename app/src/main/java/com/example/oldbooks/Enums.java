@@ -1,17 +1,22 @@
 package com.example.oldbooks;
 
 public class Enums {
-    enum BookCondition {
+    public enum BookCondition {
         NEW,
         USED
     }
-    enum BookCategory {
+    public enum BookCategory {
         ACADEMIC,
         GENERAL
     }
-    enum UserStatus {
+    public enum UserStatus {
         ACTIVE,
         NONACTIVE,
         SUSPENDED,
+    }
+    public enum BidStatus {
+        PENDING,
+        ACCEPTED,
+        REJECTED
     }
 }

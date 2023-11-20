@@ -1,8 +1,11 @@
 package com.example.oldbooks;
 
+import com.example.oldbooks.model.Bid;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Post {
+public class Post implements Serializable {
 
     private String postId;
     private String publisherId;
@@ -10,8 +13,9 @@ public class Post {
     private Enums.BookCategory bookCategory;
     private String location;
     private int price;
-    private String date;
+    private long datetime;
     private List<String> imageURLs;
+    private List<Bid> bids;
     private String author;
     private String description;
     private Enums.BookCondition bookCondition;
@@ -20,15 +24,16 @@ public class Post {
 
     public Post() {}
 
-    public Post(String postId, String publisherId, String postTitle, Enums.BookCategory bookCategory, String location, int price, String date, List<String> imageURLs, String author, String description, Enums.BookCondition bookCondition, boolean contactVisible, boolean featured) {
+    public Post(String postId, String publisherId, String postTitle, Enums.BookCategory bookCategory, String location, int price, long datetime, List<String> imageURLs, List<Bid> bids, String author, String description, Enums.BookCondition bookCondition, boolean contactVisible, boolean featured) {
         this.postId = postId;
         this.publisherId = publisherId;
         this.postTitle = postTitle;
         this.bookCategory = bookCategory;
         this.location = location;
         this.price = price;
-        this.date = date;
+        this.datetime = datetime;
         this.imageURLs = imageURLs;
+        this.bids = bids;
         this.author = author;
         this.description = description;
         this.bookCondition = bookCondition;
@@ -70,11 +75,17 @@ public class Post {
     public void setPrice(int price) {
         this.price = price;
     }
-    public String getDate() {
-        return date;
+    public long getDatetime() {
+        return datetime;
     }
-    public void setDate(String date) {
-        this.date = date;
+    public void setDatetime(long datetime) {
+        this.datetime = datetime;
+    }
+    public List<Bid> getBids() {
+        return bids;
+    }
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
     }
     public List<String> getImageURLs() {
         return imageURLs;

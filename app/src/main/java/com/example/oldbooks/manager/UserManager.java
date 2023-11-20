@@ -1,17 +1,18 @@
 package com.example.oldbooks.manager;
 
+import com.example.oldbooks.AppController;
 import com.example.oldbooks.Manager;
+import com.example.oldbooks.User;
 
 public class UserManager extends Manager {
 
-
     //region Attributes
-    private String UserId = "dummyuserid";
-    public String getUserId() {
-        return UserId;
+    private User user;
+    public User getUser() {
+        return user;
     }
-    public void setUserId(String userId) {
-        UserId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
     //endregion Attributes
 

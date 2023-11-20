@@ -1,11 +1,13 @@
 package com.example.oldbooks;
 
+import com.example.oldbooks.extras.Preconditions;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
 
-    private String userId;
     private String username;
     private String firstName;
     private String lastName;
@@ -22,10 +24,25 @@ public class User implements Serializable {
     private List<String> favPostId;
     private Enums.UserStatus userStatus;
 
-    public User() {}
+    public User() {
+        this.username = "";
+        this.firstName = "";
+        this.lastName = "";
+        this.password = "";
+        this.email = "";
+        this.coin = 0;
+        this.Country = "";
+        this.Province = "";
+        this.City = "";
+        this.Town = "";
+        this.joinedDate = "";
+        this.profileImg = "";
+        this.phoneNumber = "";
+        this.favPostId = new ArrayList<>();
+        this.userStatus = Enums.UserStatus.ACTIVE;
+    }
 
-    public User(String userId, String username, String firstName, String lastName, String password, String email, int coin, String country, String province, String city, String town, String joinedDate, String profileImg, String phoneNumber, List<String> favPostId, Enums.UserStatus userStatus) {
-        this.userId = userId;
+    public User(String username, String firstName, String lastName, String password, String email, int coin, String country, String province, String city, String town, String joinedDate, String profileImg, String phoneNumber, List<String> favPostId, Enums.UserStatus userStatus) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,66 +60,44 @@ public class User implements Serializable {
         this.userStatus = userStatus;
     }
 
-    public String getUserId() {
-        return userId;
+
+    // region Method
+    public boolean validateUsername(String string){
+        return Preconditions.checkNotEmpty(string) &&
+                Preconditions.checkNotNull(string);
     }
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public boolean validatePassword(String string){
+        return Preconditions.checkNotEmpty(string) &&
+                Preconditions.checkNotNull(string) &&
+                Preconditions.isStrongPassword(string);
     }
-    public String getUsername() {
-        return username;
+    public boolean validatePhoneNumber(String string){
+        return Preconditions.validPakistanNumber(string) &&
+                Preconditions.checkNotNull(string) &&
+                Preconditions.checkNotEmpty(string);
     }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public int getCoin() {
-        return coin;
-    }
-    public void setCoin(int coin) {
-        this.coin = coin;
-    }
-    public String getCountry() {
-        return Country;
-    }
-    public void setCountry(String country) {
-        Country = country;
-    }
-    public String getProvince() {
-        return Province;
-    }
-    public void setProvince(String province) {
-        Province = province;
-    }
-    public String getCity() {
-        return City;
-    }
-    public void setCity(String city) {
-        City = city;
-    }
-    public String getTown() {
-        return Town;
-    }
-    public void setTown(String town) {
-        Town = town;
-    }
+    // endregion Method
+
+
+    // region Getter/Setter
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
+    public String getFirstName() {return firstName;}
+    public void setFirstName(String firstName) {this.firstName = firstName;}
+    public String getLastName() {return lastName;}
+    public void setLastName(String lastName) {this.lastName = lastName;}
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
+    public int getCoin() {return coin;}
+    public void setCoin(int coin) {this.coin = coin;}
+    public String getCountry() {return Country;}
+    public void setCountry(String country) {Country = country;}
+    public String getProvince() {return Province;}
+    public void setProvince(String province) {Province = province;}
+    public String getCity() {return City;}
+    public void setCity(String city) {City = city;}
+    public String getTown() {return Town;}
+    public void setTown(String town) {Town = town;}
     public String getJoinedDate() {
         return joinedDate;
     }
@@ -139,4 +134,6 @@ public class User implements Serializable {
     public void setUserStatus(Enums.UserStatus userStatus) {
         this.userStatus = userStatus;
     }
+    // endregion Getter/Setter
+
 }

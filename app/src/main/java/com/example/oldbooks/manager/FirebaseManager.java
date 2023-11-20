@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.oldbooks.AppController;
 import com.example.oldbooks.MainActivity;
 import com.example.oldbooks.Manager;
 import com.example.oldbooks.Post;
 import com.example.oldbooks.PostDetails;
 import com.example.oldbooks.User;
+import com.example.oldbooks.model.Bid;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -81,8 +83,18 @@ public class FirebaseManager extends Manager {
             }
         }
     }
+    public void placeBid(Context context, String postId, List<Bid> updatedBids){
+        DBPostPath.child(postId).child("bids").setValue(updatedBids)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(context, "Post bid updated successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Failed to update post bid", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
     public void addNewUser(Context context, @NonNull User newUser){
-        DBUserPath.child(newUser.getUserId()).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DBUserPath.child(newUser.getUsername()).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 Toast.makeText(context, "User Added into the database", Toast.LENGTH_SHORT).show();
@@ -93,9 +105,9 @@ public class FirebaseManager extends Manager {
     public void loginUser(Context context, @NonNull User loggedUser){
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("user", loggedUser);
+        AppController.getInstance().getManager(UserManager.class).setUser(loggedUser);
         context.startActivity(intent);
     }
-
     public boolean verifySignupCredential(Context context, @NonNull String userId) {
         Task<Boolean> doesUserExistTask = doesUserExist(userId);
         return Tasks.whenAllComplete(doesUserExist(userId),getUserFromDatabase(userId))
@@ -110,10 +122,10 @@ public class FirebaseManager extends Manager {
                     }
                 }).getResult();
     }
-    public boolean verifyLoginCredential(Context context, @NonNull String userId) {
-        Task<User> getUserTask = getUserFromDatabase(userId);
-        Task<Boolean> doesUserExistTask = doesUserExist(userId);
-        return Tasks.whenAllComplete(doesUserExist(userId),getUserFromDatabase(userId))
+    public boolean verifyLoginCredential(Context context, @NonNull String username) {
+        Task<User> getUserTask = getUserFromDatabase(username);
+        Task<Boolean> doesUserExistTask = doesUserExist(username);
+        return Tasks.whenAllComplete(doesUserExist(username),getUserFromDatabase(username))
                 .continueWith(task -> {
                     if (task.isSuccessful()) {
                         User user = getUserTask.getResult();
@@ -126,8 +138,8 @@ public class FirebaseManager extends Manager {
                     }
                 }).getResult();
     }
-    public Task<User> getUserFromDatabase(String userId) {
-        return DBUserPath.child(userId).get().continueWith(task -> {
+    public Task<User> getUserFromDatabase(String username) {
+        return DBUserPath.child(username).get().continueWith(task -> {
             if (task.isSuccessful()) {
                 DataSnapshot dataSnapshot = task.getResult();
                 if (dataSnapshot.exists()) {

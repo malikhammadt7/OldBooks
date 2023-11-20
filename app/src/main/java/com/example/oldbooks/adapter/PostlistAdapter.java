@@ -47,7 +47,7 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
     public void RedrawView(@NonNull CustomViewHolder holder, int position, @NonNull Post model){
         holder.rowBinding.posttitle.setText(model.getPostTitle());
         holder.rowBinding.location.setText(model.getLocation());
-        holder.rowBinding.datetime.setText(model.getDate());
+        holder.rowBinding.datetime.setText((int) model.getDatetime());
         holder.rowBinding.price.setText(model.getPrice());
         Picasso.get().load(model.getImageURLs().get(0)).into(holder.rowBinding.imgpost);
         holder.rowBinding.favorite.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +79,7 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openItemDetails(view, model.getPostId());
+                openItemDetails(view, model);
             }
         });
     }
@@ -92,10 +92,10 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
         return false;
     }
 
-    public void openItemDetails(View view, @NonNull String postId) {
+    public void openItemDetails(View view, @NonNull Post post) {
 
         intent = new Intent(view.getContext(), PostDetails.class);
-        intent.putExtra("postid", postId);
+        intent.putExtra("post", post);
         view.getContext().startActivity(intent);
     }
 

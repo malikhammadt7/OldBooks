@@ -13,6 +13,7 @@ import com.example.customadspackage.GoogleAdMobManager;
 import com.example.oldbooks.databinding.ActivityMainBinding;
 import com.example.oldbooks.extras.Preconditions;
 import com.example.oldbooks.manager.FirebaseManager;
+import com.example.oldbooks.manager.UserManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -101,23 +102,30 @@ public class MainActivity extends AppCompatActivity {
 //region Signup
     public void btnSignUp(){
         User user = new User();
-        user.setUserId(act_binding.edtUserName.getText().toString());
+        user.setUsername(act_binding.edtUserName.getText().toString());
         user.setPassword(act_binding.edtSignupPswd.getText().toString());
         user.setPhoneNumber(act_binding.edtPhoneNumber.getText().toString());
-        if (!validateUsername(user.getUserId()) && !validatePassword(user.getPassword()) && !validatePhoneNumber(user.getPhoneNumber()))
+        if (!user.validateUsername(user.getUsername()) && !user.validatePassword(user.getPassword()) && !user.validatePhoneNumber(user.getPhoneNumber()))
+        {
+            return;
+        }
+        if (!verifySignup(user))
         {
             return;
         }
         firebaseManager.addNewUser(activity, user);
+    }
+    public boolean verifySignup(User user){
+        return firebaseManager.verifySignupCredential(activity, user.getUsername());
     }
 // endregion Signup
 
 //region Login
     public void btnLogin(){
         User user = new User();
-        user.setUserId(act_binding.edtId.getText().toString());
+        user.setUsername(act_binding.edtId.getText().toString());
         user.setPassword(act_binding.edtId.getText().toString());
-        if (!validateUsername(user.getUserId()) && !validatePassword(user.getPassword()))
+        if (!user.validateUsername(user.getUsername()) && !user.validatePassword(user.getPassword()))
         {
             return;
         }
@@ -129,29 +137,10 @@ public class MainActivity extends AppCompatActivity {
         firebaseManager.loginUser(activity,user);
     }
     public boolean verifyLogin(User user){
-        return firebaseManager.verifyLoginCredential(activity, user.getUserId());
-    }
-    public boolean verifySignup(User user){
-        return firebaseManager.verifySignupCredential(activity, user.getUserId());
+        return firebaseManager.verifyLoginCredential(activity, user.getUsername());
     }
 // endregion Login
 
-// region Method
-    public boolean validateUsername(String string){
-        return Preconditions.checkNotEmpty(string) &&
-                Preconditions.checkNotNull(string);
-    }
-    public boolean validatePassword(String string){
-        return Preconditions.checkNotEmpty(string) &&
-                Preconditions.checkNotNull(string) &&
-                Preconditions.isStrongPassword(string);
-    }
-    public boolean validatePhoneNumber(String string){
-        return Preconditions.validPakistanNumber(string) &&
-                Preconditions.checkNotNull(string) &&
-                Preconditions.checkNotEmpty(string);
-    }
-// endregion Method
 
 // endregion Login/Signup
 }
