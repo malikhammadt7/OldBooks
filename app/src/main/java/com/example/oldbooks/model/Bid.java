@@ -14,7 +14,7 @@ public class Bid implements Serializable {
     private Enums.BidStatus bidStatus;
 
     public Bid() {
-        setBidderId(AppController.getInstance().getManager(UserManager.class).getUserId());
+        setBidderId(AppController.getInstance().getManager(UserManager.class).getUser().getUsername());
         setAmount(0);
         setTimestamp(System.currentTimeMillis());
         setBidStatus(Enums.BidStatus.PENDING);

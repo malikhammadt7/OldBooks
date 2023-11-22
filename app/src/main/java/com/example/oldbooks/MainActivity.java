@@ -111,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
         {
             return;
         }
-        if (!verifySignup(user))
-        {
-            return;
-        }
+//        if (!verifySignup(user))
+//        {
+//            return;
+//        }
         user.setJoinedDate(AppController.getCurrentTimestamp());
         firebaseManager.addNewUser(activity, user);
     }
@@ -132,10 +132,10 @@ public class MainActivity extends AppCompatActivity {
         {
             return;
         }
-        if (!verifyLogin(user))
-        {
-            return;
-        }
+//        if (!verifyLogin(user))
+//        {
+//            return;
+//        }
         user.setUserStatus(Enums.UserStatus.ACTIVE);
         firebaseManager.loginUser(activity,user);
     }
