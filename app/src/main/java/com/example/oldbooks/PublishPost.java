@@ -139,16 +139,14 @@ public class PublishPost extends AppCompatActivity {
 
         postImgDB.child("/" + postId).putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    // Image upload was successful. Now, get the download URL of the image.
                     postImgDB.child("/" + postId).getDownloadUrl()
                             .addOnSuccessListener(uri -> {
                                 selectedImageUrls.clear();
                                 selectedImageUrls.add(uri.toString());
-                                // Save the imageUrl to the Realtime Database.
                                 Post post = PopulatePostData();
                                 post.setFeatured(feature);
                                 post.setImageURLs(selectedImageUrls);
-                                // Push the post to the database under the generated key
+                                post.setDatetime(AppController.getCurrentTimestamp());
                                 postDB.child(postId).setValue(post).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -165,7 +163,6 @@ public class PublishPost extends AppCompatActivity {
                                 });
                             })
                             .addOnFailureListener(e -> {
-                                // Handle any errors while getting the download URL.
 
                                 Toast.makeText(getApplicationContext(), "Image Upload failed", Toast.LENGTH_SHORT).show();
 
@@ -210,17 +207,8 @@ public class PublishPost extends AppCompatActivity {
             int price = Integer.parseInt(priceText);
             post.setPrice(price);
         }
-
-        // Set phoneSwitch
         post.setContactVisible(act_binding.phoneswitch.isChecked());
-
-        // Set other properties
         post.setAuthor(act_binding.txtBookAuthor.getText().toString());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-        String timestamp = sdf.format(now);
-        post.setDate(timestamp);
         if(!selectedImageUrls.isEmpty())
         {
             post.setImageURLs(selectedImageUrls);
@@ -327,16 +315,16 @@ public class PublishPost extends AppCompatActivity {
 
 //                do it after adding user work
 
-//                CoinManager coinManager = AppController.getInstance().getManager(CoinManager.class);
-//                if(coinManager.getTotalCoins() >= 5){
-//                    coinManager.deductCoins(5);
-//                    Toast.makeText(getApplicationContext(), "coinManager.deductCoins(5)",Toast.LENGTH_LONG);
-//
-//                    alertDialog.dismiss();
-//                }else{
-//                    alertDialog.dismiss();
-//                    Toast.makeText(getApplicationContext(), "Not Enough Coins",Toast.LENGTH_LONG);
-//                }
+                CoinManager coinManager = AppController.getInstance().getManager(CoinManager.class);
+                if(coinManager.getTotalCoins() >= 20){
+                    coinManager.deductCoins(20);
+                    Toast.makeText(getApplicationContext(), "coinManager.deductCoins(5)",Toast.LENGTH_LONG);
+
+                    alertDialog.dismiss();
+                }else{
+                    alertDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Not Enough Coins",Toast.LENGTH_LONG);
+                }
                 PostIt(true);
             }
         });

@@ -105,7 +105,9 @@ public class FirebaseManager extends Manager {
     public void loginUser(Context context, @NonNull User loggedUser){
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("user", loggedUser);
+        AppController.userId = loggedUser.getUsername();
         AppController.getInstance().getManager(UserManager.class).setUser(loggedUser);
+        AppController.getInstance().getManager(UserManager.class).setInitialized(true);
         context.startActivity(intent);
     }
     public boolean verifySignupCredential(Context context, @NonNull String userId) {

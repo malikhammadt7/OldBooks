@@ -3,6 +3,7 @@ package com.example.oldbooks.manager;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.oldbooks.AppController;
 import com.example.oldbooks.Manager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,6 +16,7 @@ public class CoinManager extends Manager{
     //region Attributes
     private final String TAG = "CoinManager";
     private int totalCoins;
+    public String userId;
     private DatabaseReference databaseReference;
     //endregion Attributes
 
@@ -26,13 +28,13 @@ public class CoinManager extends Manager{
     }
     public CoinManager(String userId) {
 //        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("totalCoins");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child("dummyuser").child("totalCoins");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         Initialize();
     }
 
     @Override
     public void Initialize() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child("dummyuser").child("coin").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -54,7 +56,7 @@ public class CoinManager extends Manager{
 
     public void setTotalCoins(int totalCoins) {
         this.totalCoins = totalCoins;
-        databaseReference.setValue(totalCoins);
+        databaseReference.child("users").child(userId).child("coin").setValue(totalCoins);
     }
 
     public void addCoins(int amount) {

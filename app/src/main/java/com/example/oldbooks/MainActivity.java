@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.customadspackage.GoogleAdMobManager;
 import com.example.oldbooks.databinding.ActivityMainBinding;
 import com.example.oldbooks.extras.Preconditions;
+import com.example.oldbooks.manager.CoinManager;
 import com.example.oldbooks.manager.FirebaseManager;
 import com.example.oldbooks.manager.UserManager;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
 
         GoogleAdMobManager.getInstance().Initialize(activity);
+        AppController.getInstance();
         firebaseManager = AppController.getInstance().getManager(FirebaseManager.class);
 
         Intent intent = getIntent();
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         addCoinsCallback = new Runnable() {
             @Override
             public void run() {
-                //AppController.getInstance().getManager(CoinManager.class).addCoins(10);
+                AppController.getInstance().getManager(CoinManager.class).addCoins(10);
                 Log.d(TAG, "give addCoins(10)");
                 Toast.makeText(activity, "Reward Given: +10 coins", Toast.LENGTH_SHORT).show();
             }
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         {
             return;
         }
+        user.setJoinedDate(AppController.getCurrentTimestamp());
         firebaseManager.addNewUser(activity, user);
     }
     public boolean verifySignup(User user){

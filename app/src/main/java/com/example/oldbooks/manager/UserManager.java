@@ -6,7 +6,9 @@ import com.example.oldbooks.User;
 
 public class UserManager extends Manager {
 
+
     //region Attributes
+    private boolean initialized;
     private User user;
     public User getUser() {
         return user;
@@ -22,7 +24,14 @@ public class UserManager extends Manager {
     //region Methods
     @Override
     public void Initialize() {
-
+        setInitialized(true);
     }
     //endregion Methods
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+    public void setInitialized(boolean initialize) {
+        this.initialized = initialize;
+    }
 }

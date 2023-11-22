@@ -18,7 +18,7 @@ public class User implements Serializable {
     private String Province;
     private String City;
     private String Town;
-    private String joinedDate;
+    private long joinedDate;
     private String profileImg;
     private String phoneNumber;
     private List<String> favPostId;
@@ -35,14 +35,14 @@ public class User implements Serializable {
         this.Province = "";
         this.City = "";
         this.Town = "";
-        this.joinedDate = "";
+        this.joinedDate = 0;
         this.profileImg = "";
         this.phoneNumber = "";
         this.favPostId = new ArrayList<>();
         this.userStatus = Enums.UserStatus.ACTIVE;
     }
 
-    public User(String username, String firstName, String lastName, String password, String email, int coin, String country, String province, String city, String town, String joinedDate, String profileImg, String phoneNumber, List<String> favPostId, Enums.UserStatus userStatus) {
+    public User(String username, String firstName, String lastName, String password, String email, int coin, String country, String province, String city, String town, long joinedDate, String profileImg, String phoneNumber, List<String> favPostId, Enums.UserStatus userStatus) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -98,10 +98,10 @@ public class User implements Serializable {
     public void setCity(String city) {City = city;}
     public String getTown() {return Town;}
     public void setTown(String town) {Town = town;}
-    public String getJoinedDate() {
+    public long getJoinedDate() {
         return joinedDate;
     }
-    public void setJoinedDate(String joinedDate) {
+    public void setJoinedDate(long joinedDate) {
         this.joinedDate = joinedDate;
     }
     public String getProfileImg() {
