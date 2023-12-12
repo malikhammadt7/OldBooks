@@ -1,5 +1,6 @@
 package com.example.oldbooks.adapter;
 
+import android.app.Application;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,13 +48,13 @@ public class PostlistAdapter extends FirebaseRecyclerAdapter<Post,PostlistAdapte
     public void RedrawView(@NonNull CustomViewHolder holder, int position, @NonNull Post model){
         holder.rowBinding.posttitle.setText(model.getPostTitle());
         holder.rowBinding.location.setText(model.getLocation());
-        holder.rowBinding.datetime.setText((int) model.getDatetime());
+        holder.rowBinding.datetime.setText(AppController.convertTimestampToDateTime(model.getDatetime()));
         holder.rowBinding.price.setText(model.getPrice());
         Picasso.get().load(model.getImageURLs().get(0)).into(holder.rowBinding.imgpost);
         holder.rowBinding.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppController.getInstance().getManager(FirebaseManager.class).removeFromFavPost(model.getPostId());
+                AppController.getInstance().getManager(FirebaseManager.class).setAsFavPost(model.getPostId());
                 holder.rowBinding.favorite.setVisibility(View.INVISIBLE);
                 holder.rowBinding.notfavorite.setVisibility(View.VISIBLE);
             }
