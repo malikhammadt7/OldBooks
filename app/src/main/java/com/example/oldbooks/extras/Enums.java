@@ -1,4 +1,4 @@
-package com.example.oldbooks;
+package com.example.oldbooks.extras;
 
 public class Enums {
     public enum BookCondition {
@@ -18,5 +18,12 @@ public class Enums {
         PENDING,
         ACCEPTED,
         REJECTED
+    }
+    public enum DialogType {
+        ACKNOWLEDGEMENT,
+        CONFIRMATION,
+        INFORMATION,
+        WARNING,
+        NOINTERNET,
     }
 }

@@ -2,17 +2,16 @@ package com.example.oldbooks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.oldbooks.activity.MainActivity;
 import com.example.oldbooks.databinding.ActivityDailyRewardsBinding;
 import com.example.oldbooks.manager.CoinManager;
 
@@ -106,7 +105,7 @@ public class DailyRewards extends AppCompatActivity {
                     e.printStackTrace();
                 }
         }else {
-            startActivity(new Intent(this,MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 

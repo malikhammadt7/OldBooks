@@ -1,7 +1,7 @@
 package com.example.oldbooks.model;
 
 import com.example.oldbooks.AppController;
-import com.example.oldbooks.Enums;
+import com.example.oldbooks.extras.Enums;
 import com.example.oldbooks.manager.UserManager;
 
 import java.io.Serializable;

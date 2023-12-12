@@ -1,6 +1,10 @@
 package com.example.oldbooks;
 
+import android.app.Activity;
+import android.app.Dialog;
+
 import com.example.oldbooks.manager.CoinManager;
+import com.example.oldbooks.manager.DialogManager;
 import com.example.oldbooks.manager.FirebaseManager;
 import com.example.oldbooks.manager.UserManager;
 
@@ -11,6 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class AppController {
+
+    //region Singleton
     private static AppController instance;
     public static synchronized AppController getInstance() {
         if (instance == null) {
@@ -18,15 +24,24 @@ public class AppController {
         }
         return instance;
     }
+    //endregion Singleton
+
+    //region Attributes
     public static String userId;
+    private Activity currentActivity;
+    //endregion Attributes
+
+    //region Initialization
     private AppController() {
         addManager(FirebaseManager.class, new FirebaseManager());
         addManager(CoinManager.class, new CoinManager());
         addManager(UserManager.class, new UserManager());
     }
+    //endregion Initialization
 
+
+    //region Actions
     private Map<Class<?>, Manager> managerMap = new HashMap<>();
-
     private void addManager(Class<?> managerClass, Manager manager) {
         managerMap.put(managerClass, manager);
     }
@@ -34,11 +49,23 @@ public class AppController {
     public <T extends Manager> T getManager(Class<T> managerClass) {
         return (T) managerMap.get(managerClass);
     }
+    //endregion Actions
 
-//region Extra
+
+    //region Methods
     public static long getCurrentTimestamp() {
         return System.currentTimeMillis();
     }
+    public static boolean IsGuestView(){
+        try {
+            return AppController.getInstance().getManager(UserManager.class).isInitialized();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    //endregion Methods
+
+    //region Extras
     public static String convertTimestampToDateTime(long timestamp) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -51,7 +78,7 @@ public class AppController {
     }
     public static String getRelativeTime(long timestamp) {
         try {
-            long now = System.currentTimeMillis();
+            long now = getCurrentTimestamp();
             long differenceMillis = now - timestamp;
 
             // Convert milliseconds to minutes, hours, and days
@@ -82,15 +109,16 @@ public class AppController {
             return "Error calculating relative time";
         }
     }
-//endregion Extra
+    //endregion Extras
 
-    //region change Intent after verification
-    public static boolean IsGuestView(){
-        try {
-            return AppController.getInstance().getManager(UserManager.class).isInitialized();
-        } catch (Exception e) {
-            return false;
-        }
+
+    //region Getter/Setter
+    public Activity getCurrentActivity() {
+        return currentActivity;
     }
-    //endregion change Intent after verification
+    public void setCurrentActivity(Activity currentActivity) {
+        this.currentActivity = currentActivity;
+    }
+    //endregion Getter/Setter
+
 }

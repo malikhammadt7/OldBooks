@@ -1,5 +1,8 @@
 package com.example.oldbooks;
 
+import android.util.Log;
+
+import com.example.oldbooks.extras.Enums;
 import com.example.oldbooks.extras.Preconditions;
 
 import java.io.Serializable;
@@ -63,6 +66,7 @@ public class User implements Serializable {
 
     // region Method
     public boolean validateUsername(String string){
+        Log.d("User", "BtnSignup Clicked");
         return Preconditions.checkNotEmpty(string) &&
                 Preconditions.checkNotNull(string);
     }

@@ -20,9 +20,6 @@ public class CoinManager extends Manager{
     private DatabaseReference databaseReference;
     //endregion Attributes
 
-    //region Singleton
-    //endregion Singleton
-
 
     public CoinManager() {
     }

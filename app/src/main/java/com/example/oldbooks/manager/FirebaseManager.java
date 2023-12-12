@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.example.oldbooks.AppController;
-import com.example.oldbooks.MainActivity;
+import com.example.oldbooks.activity.MainActivity;
 import com.example.oldbooks.Manager;
-import com.example.oldbooks.Post;
-import com.example.oldbooks.PostDetails;
 import com.example.oldbooks.User;
 import com.example.oldbooks.model.Bid;
 import com.google.android.gms.tasks.OnCompleteListener;

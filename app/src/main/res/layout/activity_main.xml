@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <Button
         android:id="@+id/btnAddPost"
@@ -113,21 +113,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="text"
-                android:text="User Name" />
+                android:hint="User Name" />
             <EditText
                 android:id="@+id/edtPhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Phone Number" />
+                android:hint="Phone Number" />
             <EditText
                 android:id="@+id/edtSignupPswd"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Password" />
+                android:hint="Password" />
             <Button
                 android:id="@+id/btnSignup"
                 android:layout_width="wrap_content"
@@ -137,5 +137,16 @@
                 android:text="SignUp"/>
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navbar_bottom"
+        style="@style/BottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_bottom_navbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

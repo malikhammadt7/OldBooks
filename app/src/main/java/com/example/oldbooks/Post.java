@@ -1,5 +1,6 @@
 package com.example.oldbooks;
 
+import com.example.oldbooks.extras.Enums;
 import com.example.oldbooks.model.Bid;
 
 import java.io.Serializable;

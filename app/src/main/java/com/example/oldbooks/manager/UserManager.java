@@ -8,7 +8,6 @@ public class UserManager extends Manager {
 
 
     //region Attributes
-    private boolean initialized;
     private User user;
     public User getUser() {
         return user;
@@ -18,8 +17,6 @@ public class UserManager extends Manager {
     }
     //endregion Attributes
 
-    //region Singleton
-    //endregion Singleton
 
     //region Methods
     @Override
@@ -27,11 +24,4 @@ public class UserManager extends Manager {
         setInitialized(true);
     }
     //endregion Methods
-
-    public boolean isInitialized() {
-        return initialized;
-    }
-    public void setInitialized(boolean initialize) {
-        this.initialized = initialize;
-    }
 }
