@@ -28,12 +28,21 @@ public class FirebaseManager extends Manager {
 
     public DatabaseReference DBPostPath = FirebaseDatabase.getInstance().getReference("post");
     public DatabaseReference DBUserPath = FirebaseDatabase.getInstance().getReference("user");
+    public DatabaseReference DBChatPath = FirebaseDatabase.getInstance().getReference("user");
 
     @Override
-    public void Initialize() { }
+    public void Initialize() {
+        DBChatPath = FirebaseDatabase.getInstance().getReference("user").child(
+                AppController.getInstance().getManager(UserManager.class).getUser().getUsername()
+        ).child("chatroom");
+    }
 
     public Query onlyFeaturedPosts() {
         return DBPostPath.orderByChild("featured").equalTo(true);
+    }
+
+    public Query showChatMessage(String OtherPerson) {
+        return DBPostPath.child(OtherPerson);
     }
 
     public Query getPostsFromCountry(String country) {
