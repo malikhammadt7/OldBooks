@@ -15,6 +15,7 @@ import com.example.oldbooks.databinding.ActivityChatBinding;
 import com.example.oldbooks.manager.FirebaseManager;
 import com.example.oldbooks.manager.UserManager;
 import com.example.oldbooks.model.ChatMessage;
+import com.example.oldbooks.model.ChatRoom;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 public class ChatActivity extends AppCompatActivity {
@@ -26,7 +27,8 @@ public class ChatActivity extends AppCompatActivity {
     private final String TAG = "ChatActivity";
     //endregion Class Constant
     private ChatMessageAdapter chatMessageAdapter;
-    String otherPerson;
+    String chatroomId;
+    ChatRoom chatRoom;
     //endregion Attributes
 
     //region Methods
@@ -42,16 +44,41 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent != null)
         {
-            otherPerson = intent.getStringExtra("selectedPerson");
+            chatroomId = intent.getStringExtra("chatroom");
         }
+
+        AppController.getInstance().getManager(FirebaseManager.class).getChatRoom(chatroomId, new FirebaseManager.OnChatRoomFetchedListener() {
+            @Override
+            public void onChatRoomFetched(ChatRoom chatroom) {
+                    chatRoom = chatroom;
+            }
+
+            @Override
+            public void onChatRoomNotFound() {
+
+            }
+
+            @Override
+            public void onChatRoomFetchError(String errorMessage) {
+
+            }
+        });
 
         FirebaseRecyclerOptions<ChatMessage> options =
                 new FirebaseRecyclerOptions.Builder<ChatMessage>()
-                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(otherPerson), ChatMessage.class)
+                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(chatroom), ChatMessage.class)
                         .build();
 
         chatMessageAdapter = new ChatMessageAdapter(this, AppController.getInstance().getManager(UserManager.class).getUser().getUsername(),options);
         actBinding.recChat.setAdapter(chatMessageAdapter);
+
+        actBinding.btnSend.setOnClickListener(v -> {
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setMessage(actBinding.txtMessage.getText().toString());
+            chatMessage.setSenderId(AppController.getInstance().getManager(UserManager.class).getUser().getUsername());
+            chatMessage.setTimestamp(AppController.getCurrentTimestamp());
+            AppController.getInstance().getManager(FirebaseManager.class).sendChatMessage(chatroom);
+        });
     }
     //endregion Initialization
     //endregion Methods
