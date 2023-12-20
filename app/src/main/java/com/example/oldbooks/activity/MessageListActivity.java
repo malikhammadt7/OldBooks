@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.example.oldbooks.AppController;
 import com.example.oldbooks.R;
@@ -18,6 +20,8 @@ import com.example.oldbooks.model.ChatMessage;
 import com.example.oldbooks.model.ChatRoom;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
+import java.util.List;
+
 public class MessageListActivity extends AppCompatActivity {
 
     //region Attributes
@@ -27,7 +31,7 @@ public class MessageListActivity extends AppCompatActivity {
     private final String TAG = "MessageListActivity";
     //endregion Class Constant
     private MessageListAdapter messageListAdapter;
-    String otherPerson;
+    private String username;
     //endregion Attributes
 
     //region Methods
@@ -40,18 +44,19 @@ public class MessageListActivity extends AppCompatActivity {
         activity = this;
         AppController.getInstance().setCurrentActivity(activity);
 
-        Intent intent = getIntent();
-        if(intent != null)
-        {
-            otherPerson = intent.getStringExtra("selectedPerson");
-        }
+        username = AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
 
         FirebaseRecyclerOptions<ChatRoom> options =
                 new FirebaseRecyclerOptions.Builder<ChatRoom>()
-                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(otherPerson), ChatRoom.class)
+                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatList(username), ChatRoom.class)
                         .build();
 
-        messageListAdapter = new ChatMessageAdapter(this, AppController.getInstance().getManager(UserManager.class).getUser().getUsername(),options);
+        messageListAdapter = new MessageListAdapter(this, username, options, new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
         actBinding.recChat.setAdapter(messageListAdapter);
 
     }

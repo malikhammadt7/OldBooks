@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 
@@ -30,69 +32,37 @@ public class FirebaseManager extends Manager {
 
     public DatabaseReference DBPostPath = FirebaseDatabase.getInstance().getReference("post");
     public DatabaseReference DBUserPath = FirebaseDatabase.getInstance().getReference("user");
-    public DatabaseReference DBChatPath = FirebaseDatabase.getInstance().getReference("user");
+    public DatabaseReference DBChatRoomPath = FirebaseDatabase.getInstance().getReference("chatroom");
 
     @Override
     public void Initialize() {
-        DBChatPath = FirebaseDatabase.getInstance().getReference("user").child(
-                AppController.getInstance().getManager(UserManager.class).getUser().getUsername()
-        ).child("chatroom");
     }
 
     public Query onlyFeaturedPosts() {
         return DBPostPath.orderByChild("featured").equalTo(true);
     }
 
-    public Query showChatMessage(String OtherPerson) {
-        return DBPostPath.child(OtherPerson);
+    public Query showChatMessage(String chatRoomId) {
+        return DBChatRoomPath.child(chatRoomId).child("messages");
     }
-
+    public Query showChatList(String username) {
+        return DBChatRoomPath.orderByChild("userIds").equalTo(username);
+    }
+    public String getUserProfileImg(String username) throws DatabaseException {
+        try {
+            DataSnapshot dataSnapshot = DBUserPath.child(username).child("profileImg").get().getResult();
+            if (dataSnapshot.exists()) {
+                return dataSnapshot.getValue(String.class);
+            }
+        } catch (DatabaseException e) {}
+        return "";
+    }
     public Query getPostsFromCountry(String country) {
         return DBPostPath.orderByChild("country").equalTo(country);
     }
 
     public Query getUsersWithRole(String role) {
         return DBUserPath.orderByChild("role").equalTo(role);
-    }
-    public void getChatRoom(String chatroomId, final OnChatRoomFetchedListener listener) {
-        DBChatPath.child(chatroomId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    // Retrieve data from the snapshot
-                    String chatroomId = snapshot.child("chatroomId").getValue(String.class);
-                    List<String> userIds = (List<String>) snapshot.child("userIds").getValue();
-                    long lastMessageTimestamp = snapshot.child("lastMessageTimestamp").getValue(Long.class);
-                    String lastSenderId = snapshot.child("lastSenderId").getValue(String.class);
-                    String lastMessage = snapshot.child("lastMessage").getValue(String.class);
-
-                    ChatRoom chatRoom = new ChatRoom(chatroomId, userIds, lastMessageTimestamp, lastSenderId, lastMessage);
-
-                    // Notify the listener that the chat room has been fetched
-                    if (listener != null) {
-                        listener.onChatRoomFetched(chatRoom);
-                    }
-                } else {
-                    // The chat room with the specified ID doesn't exist
-                    if (listener != null) {
-                        listener.onChatRoomNotFound();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                if (listener != null) {
-                    listener.onChatRoomFetchError(error.getMessage());
-                }
-            }
-        });
-    }
-
-    public interface OnChatRoomFetchedListener {
-        void onChatRoomFetched(ChatRoom chatRoom);
-        void onChatRoomNotFound();
-        void onChatRoomFetchError(String errorMessage);
     }
 
     public void sendChatMessage(ChatRoom chatRoom, ChatMessage message) {

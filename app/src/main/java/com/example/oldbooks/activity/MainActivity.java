@@ -113,6 +113,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        act_binding.btnMessageList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(activity, "Activity Changing to: MessageList", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(activity, MessageListActivity.class));
+            }
+        });
+
+        act_binding.btnExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnLogin();
+            }
+        });
+
         SetupBottomNavbar();
     }
 

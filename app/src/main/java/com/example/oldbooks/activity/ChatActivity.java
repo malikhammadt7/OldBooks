@@ -47,26 +47,9 @@ public class ChatActivity extends AppCompatActivity {
             chatroomId = intent.getStringExtra("chatroom");
         }
 
-        AppController.getInstance().getManager(FirebaseManager.class).getChatRoom(chatroomId, new FirebaseManager.OnChatRoomFetchedListener() {
-            @Override
-            public void onChatRoomFetched(ChatRoom chatroom) {
-                    chatRoom = chatroom;
-            }
-
-            @Override
-            public void onChatRoomNotFound() {
-
-            }
-
-            @Override
-            public void onChatRoomFetchError(String errorMessage) {
-
-            }
-        });
-
         FirebaseRecyclerOptions<ChatMessage> options =
                 new FirebaseRecyclerOptions.Builder<ChatMessage>()
-                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(chatroom), ChatMessage.class)
+                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(chatroomId), ChatMessage.class)
                         .build();
 
         chatMessageAdapter = new ChatMessageAdapter(this, AppController.getInstance().getManager(UserManager.class).getUser().getUsername(),options);
@@ -77,7 +60,7 @@ public class ChatActivity extends AppCompatActivity {
             chatMessage.setMessage(actBinding.txtMessage.getText().toString());
             chatMessage.setSenderId(AppController.getInstance().getManager(UserManager.class).getUser().getUsername());
             chatMessage.setTimestamp(AppController.getCurrentTimestamp());
-            AppController.getInstance().getManager(FirebaseManager.class).sendChatMessage(chatroom);
+            AppController.getInstance().getManager(FirebaseManager.class).sendChatMessage(chatMessage);
         });
     }
     //endregion Initialization

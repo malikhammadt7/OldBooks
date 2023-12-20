@@ -10,19 +10,22 @@ public class ChatRoom implements Serializable {
     private List<String> userIds;
     private List<ChatMessage> messages;
     private long lastMessageTimestamp;
+    private String postId;
     private String lastSenderId;
     private String lastMessage;
 
     public ChatRoom() {}
 
-    public ChatRoom(String chatroomId, List<String> userIds, List<ChatMessage> messages, long lastMessageTimestamp, String lastSenderId, String lastMessage) {
+    public ChatRoom(String chatroomId, List<String> userIds, List<ChatMessage> messages, long lastMessageTimestamp, String postId, String lastSenderId, String lastMessage) {
         this.chatroomId = chatroomId;
         this.userIds = userIds;
         this.messages = messages;
         this.lastMessageTimestamp = lastMessageTimestamp;
+        this.postId = postId;
         this.lastSenderId = lastSenderId;
         this.lastMessage = lastMessage;
     }
+
     public ChatRoom(String chatroomId, List<String> userIds, long lastMessageTimestamp, String lastSenderId, String lastMessage) {
         this.chatroomId = chatroomId;
         this.userIds = userIds;
@@ -54,6 +57,12 @@ public class ChatRoom implements Serializable {
     }
     public void setMessages(List<ChatMessage> messages) {
         this.messages = messages;
+    }
+    public String getPostId() {
+        return postId;
+    }
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
     public String getLastSenderId() {
         return lastSenderId;
