@@ -69,7 +69,7 @@ public class FirebaseManager extends Manager {
     public Query showChatList(String username) {
         return DBChatRoomPath.orderByChild("userIds").equalTo(username);
     }
-    public void createChatRoom(String postId, String bidderId) {
+    public void startChat(String postId, String bidderId) {
         ChatRoom chatRoom = new ChatRoom();
 
         String chatRoomId = DBChatRoomPath.push().getKey();
@@ -89,12 +89,38 @@ public class FirebaseManager extends Manager {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 if (task.isSuccessful()){
-                    AppController.getInstance().setChatRoom(chatRoom);
-                    AppController.getInstance().getCurrentActivity().startActivity(new Intent(AppController.getInstance().getCurrentActivity(), ChatActivity.class));
+                    openExistingChatRoom(chatRoom);
                 }
             }
         });
     }
+    public void isChatRoomCreated(String postId, String bidderId) {
+        DatabaseReference chatRoomsRef = DBChatRoomPath;
+
+        Query query = chatRoomsRef.orderByChild("postId").equalTo(postId);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot chatRoomSnapshot : dataSnapshot.getChildren()) {
+                    ChatRoom chatRoom = chatRoomSnapshot.getValue(ChatRoom.class);
+
+                    if (chatRoom != null && chatRoom.getUserIds() != null && chatRoom.getUserIds().contains(bidderId)) {
+                        openExistingChatRoom(chatRoom);
+                        return;
+                    }
+                }
+                startChat(postId, bidderId);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+    private void openExistingChatRoom(ChatRoom chatRoom) {
+        AppController.getInstance().setChatRoom(chatRoom);
+        AppController.getInstance().getCurrentActivity().startActivity(new Intent(AppController.getInstance().getCurrentActivity(), ChatActivity.class));
+    }
+
     public void sendChatMessage(ChatRoom chatRoom, ChatMessage message) {
         DatabaseReference chatRoomRef = DBChatRoomPath.child(chatRoom.getChatroomId());
 

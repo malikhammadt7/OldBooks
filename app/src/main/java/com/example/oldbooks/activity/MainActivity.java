@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         act_binding.btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnLogin();
+                AppController.getInstance().getManager(FirebaseManager.class).isChatRoomCreated("dummyPost", "dummyBidder");
             }
         });
 
