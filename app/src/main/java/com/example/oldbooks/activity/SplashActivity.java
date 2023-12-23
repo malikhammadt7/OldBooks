@@ -32,7 +32,6 @@ public class SplashActivity extends AppCompatActivity {
     private Thread t;
 
     //region Attributes
-
     //region Class Constants
     private ActivitySplashBinding actBinding;
     private Activity activity;
@@ -41,22 +40,23 @@ public class SplashActivity extends AppCompatActivity {
 
     //endregion Attributes
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         actBinding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(actBinding.getRoot());
         activity = this;
-//        if (!FirebaseApp.getApps(this).isEmpty()){
-//            try{
-//                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-//            }catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
         AppController.getInstance().setCurrentActivity(activity);
 
+        if (!FirebaseApp.getApps(this).isEmpty()){
+            try{
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        AppController.getInstance().initialize();
         GoogleAdMobManager.getInstance().Initialize(activity);
 
         scaleAnimationMethod();
@@ -64,12 +64,9 @@ public class SplashActivity extends AppCompatActivity {
         scaletagAnimationMethod();
     }
 
-
-
     //region Methods
 
     public void ChangeActivity(){
-
         if (!isInternetConnected()) {
             DialogManager.getInstance().showDialog(Enums.DialogType.NOINTERNET);
         }else{
@@ -79,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
                 {
                     try {
 //                        sleep(10000);
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        startActivity(new Intent(SplashActivity.this, MessageListActivity.class));
                         finish();
                     }
                     catch (Exception e) {

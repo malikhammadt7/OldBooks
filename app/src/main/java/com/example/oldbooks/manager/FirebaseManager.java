@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.example.oldbooks.AppController;
+import com.example.oldbooks.activity.ChatActivity;
 import com.example.oldbooks.activity.MainActivity;
 import com.example.oldbooks.Manager;
 import com.example.oldbooks.User;
@@ -36,18 +37,15 @@ public class FirebaseManager extends Manager {
 
     @Override
     public void Initialize() {
+        DBPostPath.keepSynced(true);
+        DBUserPath.keepSynced(true);
+        DBChatRoomPath.keepSynced(true);
     }
 
     public Query onlyFeaturedPosts() {
         return DBPostPath.orderByChild("featured").equalTo(true);
     }
 
-    public Query showChatMessage(String chatRoomId) {
-        return DBChatRoomPath.child(chatRoomId).child("messages");
-    }
-    public Query showChatList(String username) {
-        return DBChatRoomPath.orderByChild("userIds").equalTo(username);
-    }
     public String getUserProfileImg(String username) throws DatabaseException {
         try {
             DataSnapshot dataSnapshot = DBUserPath.child(username).child("profileImg").get().getResult();
@@ -65,8 +63,58 @@ public class FirebaseManager extends Manager {
         return DBUserPath.orderByChild("role").equalTo(role);
     }
 
-    public void sendChatMessage(ChatRoom chatRoom, ChatMessage message) {
+    public Query showChatMessage(String chatRoomId) {
+        return DBChatRoomPath.child(chatRoomId).child("messages");
+    }
+    public Query showChatList(String username) {
+        return DBChatRoomPath.orderByChild("userIds").equalTo(username);
+    }
+    public void createChatRoom(String postId, String bidderId) {
+        ChatRoom chatRoom = new ChatRoom();
 
+        String chatRoomId = DBChatRoomPath.push().getKey();
+        chatRoom.setChatroomId(chatRoomId);
+
+        List<String> userIds = new ArrayList<>();
+        userIds.add(AppController.getInstance().getManager(UserManager.class).getUser().getUsername());
+        userIds.add(bidderId);
+        chatRoom.setUserIds(userIds);
+
+        List<ChatMessage> messages = new ArrayList<>();
+        chatRoom.setMessages(messages);
+
+        chatRoom.setPostId(postId);
+
+        DBChatRoomPath.child(chatRoomId).setValue(chatRoom).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    AppController.getInstance().setChatRoom(chatRoom);
+                    AppController.getInstance().getCurrentActivity().startActivity(new Intent(AppController.getInstance().getCurrentActivity(), ChatActivity.class));
+                }
+            }
+        });
+    }
+    public void sendChatMessage(ChatRoom chatRoom, ChatMessage message) {
+        DatabaseReference chatRoomRef = DBChatRoomPath.child(chatRoom.getChatroomId());
+
+        chatRoom.setLastMessage(message.getMessage());
+        chatRoom.setLastSenderId(message.getSenderId());
+        chatRoom.setLastMessageTimestamp(message.getTimestamp());
+
+        DatabaseReference messagesRef = chatRoomRef.child("messages").push();
+        message.setMessageId(messagesRef.getKey());
+        messagesRef.setValue(message);
+
+        chatRoomRef.setValue(chatRoom).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    message.setSent(true);
+                    messagesRef.setValue(message);
+                }
+            }
+        });
     }
 
     List<String> favPostIds = new ArrayList<>();
@@ -126,12 +174,8 @@ public class FirebaseManager extends Manager {
         });
     }
     public void loginUser(Context context, @NonNull User loggedUser){
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("user", loggedUser);
-        AppController.userId = loggedUser.getUsername();
-        AppController.getInstance().getManager(UserManager.class).setUser(loggedUser);
-        AppController.getInstance().getManager(UserManager.class).setInitialized(true);
-        context.startActivity(intent);
+        AppController.getInstance().getManager(UserManager.class).setUserLoggedIn(loggedUser);
+        context.startActivity(new Intent(context, MainActivity.class));
     }
     public boolean verifySignupCredential(Context context, @NonNull String userId) {
         Task<Boolean> doesUserExistTask = doesUserExist(userId);

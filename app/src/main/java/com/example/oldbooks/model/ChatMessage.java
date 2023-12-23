@@ -1,5 +1,8 @@
 package com.example.oldbooks.model;
 
+import com.example.oldbooks.AppController;
+import com.example.oldbooks.manager.UserManager;
+
 public class ChatMessage {
 
     //region Attributes
@@ -7,21 +10,27 @@ public class ChatMessage {
     private String senderId;
     private String message;
     private long timestamp;
-    private boolean isRead;
     private boolean isDelivered;
     private boolean isSent;
+    private boolean isRead;
     //endregion Attributes
 
     //region Methods
-    public ChatMessage() {}
-    public ChatMessage(String messageId, String senderId, String message, long timestamp, boolean isRead, boolean isDelivered, boolean isSent) {
+    public ChatMessage() {
+        this.senderId = AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
+        this.timestamp = AppController.getCurrentTimestamp();
+        this.isDelivered = false;
+        this.isSent = false;
+        this.isRead = false;
+    }
+    public ChatMessage(String messageId, String senderId, String message, long timestamp, boolean isDelivered, boolean isSent, boolean isRead) {
         this.messageId = messageId;
         this.senderId = senderId;
         this.message = message;
         this.timestamp = timestamp;
-        this.isRead = isRead;
         this.isDelivered = isDelivered;
         this.isSent = isSent;
+        this.isRead = isRead;
     }
     //endregion Methods
 
@@ -50,12 +59,6 @@ public class ChatMessage {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
-    public boolean isRead() {
-        return isRead;
-    }
-    public void setRead(boolean read) {
-        isRead = read;
-    }
     public boolean isDelivered() {
         return isDelivered;
     }
@@ -67,6 +70,12 @@ public class ChatMessage {
     }
     public void setSent(boolean sent) {
         isSent = sent;
+    }
+    public boolean isRead() {
+        return isRead;
+    }
+    public void setRead(boolean read) {
+        isRead = read;
     }
     //endregion Getter/Setter
 }

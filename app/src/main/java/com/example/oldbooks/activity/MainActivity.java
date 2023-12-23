@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         AppController.getInstance().setCurrentActivity(activity);
 
-        AppController.getInstance();
         firebaseManager = AppController.getInstance().getManager(FirebaseManager.class);
 
         Intent intent = getIntent();
@@ -116,8 +115,12 @@ public class MainActivity extends AppCompatActivity {
         act_binding.btnMessageList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(activity, "Activity Changing to: MessageList", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(activity, MessageListActivity.class));
+                if (AppController.IsGuestView()){
+                    Toast.makeText(activity, "Activity Changing to: MessageList", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(activity, MessageListActivity.class));
+                }else{
+                    Toast.makeText(activity, "Cannot go to message list because user is not logged in", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

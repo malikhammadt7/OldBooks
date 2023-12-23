@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.oldbooks.AppController;
+import com.example.oldbooks.activity.ChatActivity;
 import com.example.oldbooks.databinding.ItemmodelChatlistBinding;
 import com.example.oldbooks.databinding.ItemmodelChatmessageBinding;
 import com.example.oldbooks.manager.FirebaseManager;
@@ -54,7 +55,8 @@ public class MessageListAdapter extends FirebaseRecyclerAdapter<ChatRoom,Message
         holder.binding.getRoot().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(AppController.getInstance().getCurrentActivity(), ChatMessage.class));
+                AppController.getInstance().setChatRoom(model);
+                context.startActivity(new Intent(AppController.getInstance().getCurrentActivity(), ChatActivity.class));
             }
         });
     }

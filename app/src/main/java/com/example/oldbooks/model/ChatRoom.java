@@ -1,7 +1,11 @@
 package com.example.oldbooks.model;
 
+import com.example.oldbooks.AppController;
+import com.example.oldbooks.manager.UserManager;
+
 import java.io.Serializable;
 import java.security.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatRoom implements Serializable {
@@ -14,7 +18,10 @@ public class ChatRoom implements Serializable {
     private String lastSenderId;
     private String lastMessage;
 
-    public ChatRoom() {}
+    public ChatRoom() {
+        this.lastSenderId = AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
+        this.lastMessageTimestamp = AppController.getCurrentTimestamp();
+    }
 
     public ChatRoom(String chatroomId, List<String> userIds, List<ChatMessage> messages, long lastMessageTimestamp, String postId, String lastSenderId, String lastMessage) {
         this.chatroomId = chatroomId;

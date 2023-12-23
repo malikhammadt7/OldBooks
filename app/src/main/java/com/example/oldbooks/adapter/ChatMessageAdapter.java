@@ -36,7 +36,7 @@ public class ChatMessageAdapter extends FirebaseRecyclerAdapter<ChatMessage, Cha
         super(options);
         this.context = context;
         this.username = username;
-        favposts = (List<String>) AppController.getInstance().getManager(FirebaseManager.class).getFavPosts();
+        favposts.addAll(AppController.getInstance().getManager(FirebaseManager.class).getFavPosts());
     }
     @Override
     protected void onBindViewHolder(@NonNull CustomViewHolder holder, int position, @NonNull ChatMessage model) {

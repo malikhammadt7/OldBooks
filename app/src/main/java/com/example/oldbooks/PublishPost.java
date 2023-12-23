@@ -49,7 +49,7 @@ public class PublishPost extends AppCompatActivity {
 
     private int maxImageViews = 6;
     private int currentImageViews = 1;
-// endregion
+// endregion Attributes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

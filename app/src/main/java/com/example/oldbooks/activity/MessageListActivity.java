@@ -51,29 +51,39 @@ public class MessageListActivity extends AppCompatActivity {
                         .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatList(username), ChatRoom.class)
                         .build();
 
-        messageListAdapter = new MessageListAdapter(this, username, options, new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-        });
+        messageListAdapter = new MessageListAdapter(this, username, options);
         actBinding.recChat.setAdapter(messageListAdapter);
-
+        updateVisibility();
     }
     //endregion Initialization
+
+    private void updateVisibility() {
+        if (messageListAdapter.getItemCount() > 0) {
+            actBinding.recChat.setVisibility(View.VISIBLE);
+            actBinding.recEmpty.setVisibility(View.GONE);
+        } else {
+            actBinding.recChat.setVisibility(View.GONE);
+            actBinding.recEmpty.setVisibility(View.VISIBLE);
+        }
+    }
     //endregion Methods
 
     //region Extras
     @Override
     protected void onStart() {
         super.onStart();
-        messageListAdapter.startListening();
+        if (messageListAdapter != null) {
+            messageListAdapter.startListening();
+        }
+        updateVisibility();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        messageListAdapter.stopListening();
+        if (messageListAdapter != null) {
+            messageListAdapter.stopListening();
+        }
     }
     //endregion Extras
 

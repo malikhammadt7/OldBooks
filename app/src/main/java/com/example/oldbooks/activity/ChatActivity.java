@@ -27,7 +27,6 @@ public class ChatActivity extends AppCompatActivity {
     private final String TAG = "ChatActivity";
     //endregion Class Constant
     private ChatMessageAdapter chatMessageAdapter;
-    String chatroomId;
     ChatRoom chatRoom;
     //endregion Attributes
 
@@ -41,15 +40,11 @@ public class ChatActivity extends AppCompatActivity {
         activity = this;
         AppController.getInstance().setCurrentActivity(activity);
 
-        Intent intent = getIntent();
-        if(intent != null)
-        {
-            chatroomId = intent.getStringExtra("chatroom");
-        }
+        chatRoom = AppController.getInstance().getChatRoom();
 
         FirebaseRecyclerOptions<ChatMessage> options =
                 new FirebaseRecyclerOptions.Builder<ChatMessage>()
-                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(chatroomId), ChatMessage.class)
+                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(chatRoom.getChatroomId()), ChatMessage.class)
                         .build();
 
         chatMessageAdapter = new ChatMessageAdapter(this, AppController.getInstance().getManager(UserManager.class).getUser().getUsername(),options);
@@ -58,9 +53,8 @@ public class ChatActivity extends AppCompatActivity {
         actBinding.btnSend.setOnClickListener(v -> {
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setMessage(actBinding.txtMessage.getText().toString());
-            chatMessage.setSenderId(AppController.getInstance().getManager(UserManager.class).getUser().getUsername());
-            chatMessage.setTimestamp(AppController.getCurrentTimestamp());
-            AppController.getInstance().getManager(FirebaseManager.class).sendChatMessage(chatMessage);
+            AppController.getInstance().getManager(FirebaseManager.class).sendChatMessage(chatRoom, chatMessage);
+            chatMessageAdapter.notifyDataSetChanged();
         });
     }
     //endregion Initialization

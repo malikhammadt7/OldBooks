@@ -7,6 +7,7 @@ import com.example.oldbooks.manager.CoinManager;
 import com.example.oldbooks.manager.DialogManager;
 import com.example.oldbooks.manager.FirebaseManager;
 import com.example.oldbooks.manager.UserManager;
+import com.example.oldbooks.model.ChatRoom;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class AppController {
     //endregion Singleton
 
     //region Attributes
-    public static String userId;
+    private ChatRoom chatRoom;
     private Activity currentActivity;
     //endregion Attributes
 
@@ -36,6 +37,10 @@ public class AppController {
         addManager(FirebaseManager.class, new FirebaseManager());
         addManager(CoinManager.class, new CoinManager());
         addManager(UserManager.class, new UserManager());
+    }
+    public void initialize() {
+        getManager(UserManager.class).Initialize();
+        getManager(FirebaseManager.class).Initialize();
     }
     //endregion Initialization
 
@@ -111,13 +116,18 @@ public class AppController {
     }
     //endregion Extras
 
-
     //region Getter/Setter
     public Activity getCurrentActivity() {
         return currentActivity;
     }
     public void setCurrentActivity(Activity currentActivity) {
         this.currentActivity = currentActivity;
+    }
+    public ChatRoom getChatRoom() {
+        return chatRoom;
+    }
+    public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
     }
     //endregion Getter/Setter
 
