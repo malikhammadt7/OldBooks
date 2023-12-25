@@ -1,6 +1,8 @@
 package com.example.oldbooks.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,13 +49,16 @@ public class ChatActivity extends AppCompatActivity {
                         .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatMessage(chatRoom.getChatroomId()), ChatMessage.class)
                         .build();
 
+
         chatMessageAdapter = new ChatMessageAdapter(this, AppController.getInstance().getManager(UserManager.class).getUser().getUsername(),options);
+        actBinding.recChat.setLayoutManager(new LinearLayoutManager(this));
         actBinding.recChat.setAdapter(chatMessageAdapter);
 
         actBinding.btnSend.setOnClickListener(v -> {
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setMessage(actBinding.txtMessage.getText().toString());
             AppController.getInstance().getManager(FirebaseManager.class).sendChatMessage(chatRoom, chatMessage);
+            actBinding.txtMessage.setText("");
             chatMessageAdapter.notifyDataSetChanged();
         });
     }

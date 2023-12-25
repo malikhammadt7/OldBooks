@@ -2,6 +2,7 @@ package com.example.oldbooks.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,6 @@ import java.util.List;
 
 public class ChatMessageAdapter extends FirebaseRecyclerAdapter<ChatMessage, ChatMessageAdapter.CustomViewHolder> {
 
-    public List<String> favposts = new ArrayList<>();
     public Context context;
     Intent intent;
     String username;
@@ -36,7 +36,6 @@ public class ChatMessageAdapter extends FirebaseRecyclerAdapter<ChatMessage, Cha
         super(options);
         this.context = context;
         this.username = username;
-        favposts.addAll(AppController.getInstance().getManager(FirebaseManager.class).getFavPosts());
     }
     @Override
     protected void onBindViewHolder(@NonNull CustomViewHolder holder, int position, @NonNull ChatMessage model) {
@@ -53,11 +52,16 @@ public class ChatMessageAdapter extends FirebaseRecyclerAdapter<ChatMessage, Cha
     }
 
     public void RedrawView(@NonNull CustomViewHolder holder, int position, @NonNull ChatMessage model){
-        if(model.getSenderId() == username)
+
+        Log.d("sendChatMessage", "RedrawView: getSenderId " + model.getSenderId());
+        Log.d("sendChatMessage", "RedrawView: username " + username);
+        if(model.getSenderId().equals(username))
         {
+            Log.d("sendChatMessage", "RedrawView: your message");
             showYourMessage(holder, position, model);
         }else
         {
+            Log.d("sendChatMessage", "RedrawView: other message");
             showOtherMessage(holder, position, model);
         }
     }

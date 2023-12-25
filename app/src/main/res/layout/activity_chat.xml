@@ -35,6 +35,7 @@
             android:layout_toLeftOf="@id/btn_send"
             android:background="@drawable/bg_edittext_rounded"
             android:elevation="4dp"
+            android:maxLines="1"
             android:hint="Write message here"
             android:padding="10dp" />
 

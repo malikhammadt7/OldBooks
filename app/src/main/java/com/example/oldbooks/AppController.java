@@ -1,17 +1,26 @@
 package com.example.oldbooks;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.app.Dialog;
+import android.util.Log;
 
 import com.example.oldbooks.manager.CoinManager;
 import com.example.oldbooks.manager.DialogManager;
 import com.example.oldbooks.manager.FirebaseManager;
 import com.example.oldbooks.manager.UserManager;
+import com.example.oldbooks.model.ChatMessage;
 import com.example.oldbooks.model.ChatRoom;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,6 +38,8 @@ public class AppController {
 
     //region Attributes
     private ChatRoom chatRoom;
+    private List<String> chatroomIds = new ArrayList<>();
+    private List<ChatRoom> chatRooms = new ArrayList<>();
     private Activity currentActivity;
     //endregion Attributes
 
@@ -66,6 +77,88 @@ public class AppController {
             return AppController.getInstance().getManager(UserManager.class).isInitialized();
         } catch (Exception e) {
             return false;
+        }
+    }
+    public void FillChatRoomsList(){
+        for (String chatRoomId : chatroomIds) {
+            getManager(FirebaseManager.class).showChatRoom(chatRoomId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+                    Log.d(TAG, "MessageListAdapter: chatRoomIds 3 " + task.getResult().getValue() + " ");
+                    if(task.isSuccessful()){
+                        ChatRoom chatRoom = fromDataSnapshot(task.getResult());
+                        if (chatRoom != null) {
+                            chatRooms.add(chatRoom);
+                            Log.d(TAG, "MessageListAdapter: task.getResult() " + chatRoom + " " + task.getResult());
+                            System.out.println(chatRoom);
+                        } else {
+                            System.out.println("DataSnapshot does not exist or is invalid.");
+                        }
+                    }else{
+                        Log.d(TAG, "MessageListAdapter: chatRoomIds 4");
+                    }
+                }
+            });
+        }
+    }
+    public void LoadChatRooms(){
+        try {
+            String username = AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
+            Log.d(TAG, "username: " + username);
+            AppController.getInstance().getManager(FirebaseManager.class).showChatList(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+                    if(task.isSuccessful()){
+                        Log.d(TAG, "onCreate: task " + task.getResult());
+                        for (DataSnapshot chatRoomSnapshot : task.getResult().getChildren()) {
+                            chatroomIds.add(chatRoomSnapshot.getValue().toString());
+                        }
+                        FillChatRoomsList();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.d(TAG, "LoadChatRooms " + e);
+        }
+    }
+    public static ChatRoom fromDataSnapshot(DataSnapshot dataSnapshot) {
+        if (dataSnapshot.exists()) {
+            String chatroomId = dataSnapshot.getKey();
+
+            Map<String, Object> dataMap = (Map<String, Object>) dataSnapshot.getValue();
+
+            List<String> userIds = (List<String>) dataMap.get("userIds");
+            long lastMessageTimestamp = (long) dataMap.get("lastMessageTimestamp");
+            String postId = (String) dataMap.get("postId");
+            String lastSenderId = (String) dataMap.get("lastSenderId");
+            String lastMessage = (String) dataMap.get("lastMessage");
+
+            List<Map<String, Object>> messagesData = (List<Map<String, Object>>) dataMap.get("messages");
+            List<ChatMessage> messages = new ArrayList<>();
+            if (messagesData != null) {
+                for (Map<String, Object> messageData : messagesData) {
+                    long timestamp = (long) messageData.get("timestamp");
+                    String senderId = (String) messageData.get("senderId");
+                    boolean delivered = (boolean) messageData.get("delivered");
+                    String messageText = (String) messageData.get("message");
+                    boolean sent = (boolean) messageData.get("sent");
+                    boolean read = (boolean) messageData.get("read");
+
+                    ChatMessage chatMessage = new ChatMessage();
+                    chatMessage.setTimestamp(timestamp);
+                    chatMessage.setSenderId(senderId);
+                    chatMessage.setDelivered(delivered);
+                    chatMessage.setMessage(messageText);
+                    chatMessage.setSent(sent);
+                    chatMessage.setRead(read);
+                    messages.add(chatMessage);
+                }
+            }
+
+            return new ChatRoom(chatroomId, userIds, messages, lastMessageTimestamp, postId, lastSenderId, lastMessage);
+        } else {
+            // Handle the case where the DataSnapshot does not exist
+            return null;
         }
     }
     //endregion Methods
@@ -128,6 +221,18 @@ public class AppController {
     }
     public void setChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
+    }
+    public List<ChatRoom> getChatRooms() {
+        return chatRooms;
+    }
+    public void setChatRooms(List<ChatRoom> chatRooms) {
+        this.chatRooms = chatRooms;
+    }
+    public List<String> getChatroomIds() {
+        return chatroomIds;
+    }
+    public void setChatroomIds(List<String> chatroomIds) {
+        this.chatroomIds = chatroomIds;
     }
     //endregion Getter/Setter
 

@@ -48,20 +48,20 @@ public class SplashActivity extends AppCompatActivity {
         activity = this;
         AppController.getInstance().setCurrentActivity(activity);
 
-        if (!FirebaseApp.getApps(this).isEmpty()){
-            try{
-                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        if (!FirebaseApp.getApps(this).isEmpty()){
+//            try{
+//                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+//            }catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         AppController.getInstance().initialize();
         GoogleAdMobManager.getInstance().Initialize(activity);
 
-        scaleAnimationMethod();
-        scalenameAnimationMethod();
-        scaletagAnimationMethod();
+        animScaleUp(actBinding.splashApplogo, 500, 0, false);
+        animScaleUp(actBinding.splashAppname, 200, 200, false);
+        animScaleUp(actBinding.splashApptagline, 200, 400, true);
     }
 
     //region Methods
@@ -76,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
                 {
                     try {
 //                        sleep(10000);
-                        startActivity(new Intent(SplashActivity.this, MessageListActivity.class));
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         finish();
                     }
                     catch (Exception e) {
@@ -88,110 +88,33 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private void scaleAnimationMethod() {
-        ImageView imglogo = actBinding.splashApplogo;
+    private <T extends View> void animScaleUp(T view, long duration, long offset, boolean _changeActivity) {
+        view.setVisibility(View.VISIBLE);
 
-        Log.d(TAG, "scaleAnimationMethod: 1");
-        imglogo.setVisibility(View.VISIBLE);
-        // Create a ScaleAnimation to zoom the logo from 0 to 1 scale
         ScaleAnimation scaleAnimation = new ScaleAnimation(
-                0f, 1f, // Start and end scale X
-                0f, 1f, // Start and end scale Y
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point X (center)
-                Animation.RELATIVE_TO_SELF, 0.5f  // Pivot point Y (center)
+                0f, 1f,
+                0f, 1f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
         );
-        scaleAnimation.setDuration(500); // Animation duration in milliseconds
-        scaleAnimation.setFillAfter(true); // Keep the final scale after the animation ends
+        scaleAnimation.setDuration(duration);
+        scaleAnimation.setStartOffset(offset);
+        scaleAnimation.setFillAfter(true);
 
-        Log.d(TAG, "scaleAnimationMethod: 2");
-        // Set an animation listener to make the ImageView visible after the animation ends
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {}
-
             @Override
             public void onAnimationEnd(Animation animation) {
-                Log.d(TAG, "scaleAnimationMethod: 4");
-                imglogo.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE);
+                if(_changeActivity){
+                    ChangeActivity();
+                }
             }
-
             @Override
             public void onAnimationRepeat(Animation animation) {}
         });
-
-        // Start the animation
-        imglogo.startAnimation(scaleAnimation);
-        Log.d(TAG, "scaleAnimationMethod: 3");
-    }
-
-    private void scalenameAnimationMethod() {
-        TextView txtlogo = actBinding.splashAppname;
-
-        txtlogo.setVisibility(View.VISIBLE);
-        // Create a ScaleAnimation to zoom the logo from 0 to 1 scale
-        ScaleAnimation scaleAnimation = new ScaleAnimation(
-                0f, 1f, // Start and end scale X
-                0f, 1f, // Start and end scale Y
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point X (center)
-                Animation.RELATIVE_TO_SELF, 0.5f  // Pivot point Y (center)
-        );
-        scaleAnimation.setDuration(200); // Animation duration in milliseconds
-        scaleAnimation.setStartOffset(200);
-        scaleAnimation.setFillAfter(true); // Keep the final scale after the animation ends
-
-        // Set an animation listener to make the ImageView visible after the animation ends
-        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {}
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Log.d(TAG, "scaleAnimationMethod: 5");
-                txtlogo.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
-        });
-
-        // Start the animation
-        txtlogo.startAnimation(scaleAnimation);
-    }
-
-
-    private void scaletagAnimationMethod() {
-        TextView txttag = actBinding.splashApptagline;
-
-        txttag.setVisibility(View.VISIBLE);
-        // Create a ScaleAnimation to zoom the logo from 0 to 1 scale
-        ScaleAnimation scaleAnimation = new ScaleAnimation(
-                0f, 1f, // Start and end scale X
-                0f, 1f, // Start and end scale Y
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point X (center)
-                Animation.RELATIVE_TO_SELF, 0.5f  // Pivot point Y (center)
-        );
-        scaleAnimation.setDuration(200); // Animation duration in milliseconds
-        scaleAnimation.setStartOffset(400);
-        scaleAnimation.setFillAfter(true); // Keep the final scale after the animation ends
-
-        // Set an animation listener to make the ImageView visible after the animation ends
-        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {}
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Log.d(TAG, "scaleAnimationMethod: 6");
-                txttag.setVisibility(View.VISIBLE);
-                ChangeActivity();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
-        });
-
-        // Start the animation
-        txttag.startAnimation(scaleAnimation);
+        view.startAnimation(scaleAnimation);
     }
 
     private boolean isInternetConnected() {
@@ -202,10 +125,7 @@ public class SplashActivity extends AppCompatActivity {
 
         return (wifiConn != null && wifiConn.isConnected()) || (mobileConn != null && mobileConn.isConnected());
     }
-
-
     //endregion Methods
-
 
     @Override
     public void onBackPressed() {

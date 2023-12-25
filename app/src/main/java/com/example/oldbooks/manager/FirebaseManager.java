@@ -2,6 +2,7 @@ package com.example.oldbooks.manager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.oldbooks.AppController;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -67,7 +69,23 @@ public class FirebaseManager extends Manager {
         return DBChatRoomPath.child(chatRoomId).child("messages");
     }
     public Query showChatList(String username) {
-        return DBChatRoomPath.orderByChild("userIds").equalTo(username);
+        return FirebaseDatabase.getInstance().getReference("user").child(username).child("chatroomId");
+    }
+    public Query showChatRoom(String chatroomId) {
+        return DBChatRoomPath.child(chatroomId);
+    }
+    public void generateChatList(String username) {
+        List<String> usernames = new ArrayList<>();
+        usernames.add(username);
+        Log.d("firebase", "usernames.get(0): " + usernames.toString());
+        DBChatRoomPath.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()){
+                    Log.d("firebase", "generateChatList: " + task.getResult());
+                }
+            }
+        });
     }
     public void startChat(String postId, String bidderId) {
         ChatRoom chatRoom = new ChatRoom();
@@ -85,11 +103,32 @@ public class FirebaseManager extends Manager {
 
         chatRoom.setPostId(postId);
 
+        String username = AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
+
         DBChatRoomPath.child(chatRoomId).setValue(chatRoom).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
                 if (task.isSuccessful()){
-                    openExistingChatRoom(chatRoom);
+                    DBUserPath.child(username).child("chatroomId").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+                            if(task.isSuccessful()){
+                                List<String> chatroomIds = new ArrayList<>();
+                                for (DataSnapshot chatRoomSnapshot : task.getResult().getChildren()) {
+                                    chatroomIds.add(chatRoomSnapshot.toString());
+                                }
+                                chatroomIds.add(chatRoomId);
+                                DBUserPath.child(username).child("chatroomId").setValue(chatroomIds).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+                                            openExistingChatRoom(chatRoom);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -102,6 +141,20 @@ public class FirebaseManager extends Manager {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    Log.d("isChatRoomCreated", "dataSnapshot.getChildren(): " + dataSnapshot.getChildrenCount());
+                    Log.d("isChatRoomCreated", "dataSnapshot.getChildren().toString(): " + dataSnapshot.getChildren().toString());
+                    dataSnapshot.getChildren().toString();
+                    // dataSnapshot.getValue() returns a Map<String, Object> representing the JSON structure
+                    Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
+
+                    // Now 'data' contains your JSON object
+                    // You can access specific fields like data.get("fieldName")
+
+                    // Example: Print the JSON object
+                    Log.d("FirebaseData", "Data: " + data.toString());
+                }
+
                 for (DataSnapshot chatRoomSnapshot : dataSnapshot.getChildren()) {
                     ChatRoom chatRoom = chatRoomSnapshot.getValue(ChatRoom.class);
 
@@ -120,7 +173,6 @@ public class FirebaseManager extends Manager {
         AppController.getInstance().setChatRoom(chatRoom);
         AppController.getInstance().getCurrentActivity().startActivity(new Intent(AppController.getInstance().getCurrentActivity(), ChatActivity.class));
     }
-
     public void sendChatMessage(ChatRoom chatRoom, ChatMessage message) {
         DatabaseReference chatRoomRef = DBChatRoomPath.child(chatRoom.getChatroomId());
 
@@ -128,17 +180,20 @@ public class FirebaseManager extends Manager {
         chatRoom.setLastSenderId(message.getSenderId());
         chatRoom.setLastMessageTimestamp(message.getTimestamp());
 
-        DatabaseReference messagesRef = chatRoomRef.child("messages").push();
-        message.setMessageId(messagesRef.getKey());
-        messagesRef.setValue(message);
+        List<ChatMessage> messages = new ArrayList<>();
+        messages.addAll(chatRoom.getMessages());
+        messages.add(message);
+        message.setSent(true);
+
+        chatRoom.setMessages(messages);
 
         chatRoomRef.setValue(chatRoom).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    message.setSent(true);
-                    messagesRef.setValue(message);
-                }
+//                if (task.isSuccessful()) {
+//                    message.setSent(true);
+//                    messagesRef.setValue(message);
+//                }
             }
         });
     }
@@ -194,8 +249,10 @@ public class FirebaseManager extends Manager {
         DBUserPath.child(newUser.getUsername()).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@androidx.annotation.NonNull Task<Void> task) {
-                Toast.makeText(context, "User Added into the database", Toast.LENGTH_SHORT).show();
-                loginUser(context, newUser);
+                if (task.isSuccessful()){
+                    Toast.makeText(context, "User Added into the database", Toast.LENGTH_SHORT).show();
+                    loginUser(context, newUser);
+                }
             }
         });
     }
@@ -203,47 +260,61 @@ public class FirebaseManager extends Manager {
         AppController.getInstance().getManager(UserManager.class).setUserLoggedIn(loggedUser);
         context.startActivity(new Intent(context, MainActivity.class));
     }
-    public boolean verifySignupCredential(Context context, @NonNull String userId) {
-        Task<Boolean> doesUserExistTask = doesUserExist(userId);
-        return Tasks.whenAllComplete(doesUserExist(userId),getUserFromDatabase(userId))
-                .continueWith(task -> {
-                    if (task.isSuccessful()) {
-                        boolean userExists = doesUserExistTask.getResult();
-                        Toast.makeText(context, "UserName already exist", Toast.LENGTH_SHORT).show();
-                        return userExists;
-                    } else {
-                        Toast.makeText(context, "UserName Credential not exist", Toast.LENGTH_SHORT).show();
-                        throw task.getException();
-                    }
-                }).getResult();
+//    public boolean verifySignupCredential(Context context, @NonNull String userId) {
+//        Task<Boolean> doesUserExistTask = doesUserExist(userId);
+//        return Tasks.whenAllComplete(doesUserExist(userId),getUserFromDatabase(userId))
+//                .continueWith(task -> {
+//                    if (task.isSuccessful()) {
+//                        boolean userExists = doesUserExistTask.getResult();
+//                        Toast.makeText(context, "UserName already exist", Toast.LENGTH_SHORT).show();
+//                        return userExists;
+//                    } else {
+//                        Toast.makeText(context, "UserName Credential not exist", Toast.LENGTH_SHORT).show();
+//                        throw task.getException();
+//                    }
+//                }).getResult();
+//    }
+//    public boolean verifyLoginCredential(Context context, @NonNull String username) {
+//        Task<User> getUserTask = getUserFromDatabase(username);
+//        Task<Boolean> doesUserExistTask = doesUserExist(username);
+//        return Tasks.whenAllComplete(doesUserExist(username),getUserFromDatabase(username))
+//                .continueWith(task -> {
+//                    if (task.isSuccessful()) {
+//                        User user = getUserTask.getResult();
+//                        boolean userExists = doesUserExistTask.getResult();
+//                        Toast.makeText(context, "Login Credential Verified", Toast.LENGTH_SHORT).show();
+//                        return userExists && user != null;
+//                    } else {
+//                        Toast.makeText(context, "Login Credential not Verified", Toast.LENGTH_SHORT).show();
+//                        throw task.getException();
+//                    }
+//                }).getResult();
+//    }
+    public interface OnUserFetchListener {
+        void onUserFetchSuccess(User user);
+        void onUserFetchFailure(String errorMessage);
     }
-    public boolean verifyLoginCredential(Context context, @NonNull String username) {
-        Task<User> getUserTask = getUserFromDatabase(username);
-        Task<Boolean> doesUserExistTask = doesUserExist(username);
-        return Tasks.whenAllComplete(doesUserExist(username),getUserFromDatabase(username))
-                .continueWith(task -> {
-                    if (task.isSuccessful()) {
-                        User user = getUserTask.getResult();
-                        boolean userExists = doesUserExistTask.getResult();
-                        Toast.makeText(context, "Login Credential Verified", Toast.LENGTH_SHORT).show();
-                        return userExists && user != null;
+    public void getUserFromDatabase(String username, final OnUserFetchListener listener) {
+        Log.d("Firebase", "getUserFromDatabase: " + username);
+        DBUserPath.child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()){
+                    Log.d("Firebase", "onComplete: " + username);
+                    if (task.getResult().exists()) {
+
+                        Log.d("Firebase", "onComplete: dataSnapshot " + task.getResult());
+                        User user = task.getResult().getValue(User.class);
+                        Log.d("Firebase", "onComplete: dataSnapshot user " + user.getUsername());
+                        if (user != null) {
+                            listener.onUserFetchSuccess(user);
+                        } else {
+                            listener.onUserFetchFailure("User data is null");
+                        }
                     } else {
-                        Toast.makeText(context, "Login Credential not Verified", Toast.LENGTH_SHORT).show();
-                        throw task.getException();
+                        listener.onUserFetchFailure("User not found");
                     }
-                }).getResult();
-    }
-    public Task<User> getUserFromDatabase(String username) {
-        return DBUserPath.child(username).get().continueWith(task -> {
-            if (task.isSuccessful()) {
-                DataSnapshot dataSnapshot = task.getResult();
-                if (dataSnapshot.exists()) {
-                    return dataSnapshot.getValue(User.class);
-                } else {
-                    return null;
                 }
-            } else {
-                throw task.getException();
             }
         });
     }

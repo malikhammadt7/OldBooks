@@ -24,6 +24,7 @@ public class User implements Serializable {
     private long joinedDate;
     private String profileImg;
     private String phoneNumber;
+    private List<String> chatroomId;
     private List<String> favPostId;
     private Enums.UserStatus userStatus;
 
@@ -38,9 +39,10 @@ public class User implements Serializable {
         this.Province = "";
         this.City = "";
         this.Town = "";
-        this.joinedDate = 0;
+        this.joinedDate = AppController.getCurrentTimestamp();
         this.profileImg = "";
         this.phoneNumber = "";
+        this.chatroomId = new ArrayList<>();
         this.favPostId = new ArrayList<>();
         this.userStatus = Enums.UserStatus.ACTIVE;
     }
@@ -119,6 +121,12 @@ public class User implements Serializable {
     }
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    public List<String> getChatroomId() {
+        return chatroomId;
+    }
+    public void setChatroomId(List<String> chatroomId) {
+        this.chatroomId = chatroomId;
     }
     public List<String> getFavPostId() {
         return favPostId;

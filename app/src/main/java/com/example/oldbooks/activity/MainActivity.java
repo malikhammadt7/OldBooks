@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseManager = AppController.getInstance().getManager(FirebaseManager.class);
 
+
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("user")) {
             User user = (User) intent.getSerializableExtra("user");
@@ -165,11 +166,11 @@ public class MainActivity extends AppCompatActivity {
 
 //region Signup
     public void btnSignUp(){
+        Log.d(TAG, "BtnSignup");
         User user = new User();
         user.setUsername(act_binding.edtUserName.getText().toString());
         user.setPassword(act_binding.edtSignupPswd.getText().toString());
         user.setPhoneNumber(act_binding.edtPhoneNumber.getText().toString());
-        Log.d(TAG, "BtnSignup");
         if (!user.validateUsername(user.getUsername()) && !user.validatePassword(user.getPassword()) && !user.validatePhoneNumber(user.getPhoneNumber()))
         {
             return;
@@ -178,12 +179,11 @@ public class MainActivity extends AppCompatActivity {
 //        {
 //            return;
 //        }
-        user.setJoinedDate(AppController.getCurrentTimestamp());
         firebaseManager.addNewUser(activity, user);
     }
-    public boolean verifySignup(User user){
-        return firebaseManager.verifySignupCredential(activity, user.getUsername());
-    }
+//    public boolean verifySignup(User user){
+//        return firebaseManager.verifySignupCredential(activity, user.getUsername());
+//    }
 // endregion Signup
 
 //region Login
@@ -202,9 +202,9 @@ public class MainActivity extends AppCompatActivity {
         user.setUserStatus(Enums.UserStatus.ACTIVE);
         firebaseManager.loginUser(activity,user);
     }
-    public boolean verifyLogin(User user){
-        return firebaseManager.verifyLoginCredential(activity, user.getUsername());
-    }
+//    public boolean verifyLogin(User user){
+//        return firebaseManager.verifyLoginCredential(activity, user.getUsername());
+//    }
 // endregion Login
 
 

@@ -6,7 +6,6 @@ import com.example.oldbooks.manager.UserManager;
 public class ChatMessage {
 
     //region Attributes
-    private String messageId;
     private String senderId;
     private String message;
     private long timestamp;
@@ -23,8 +22,7 @@ public class ChatMessage {
         this.isSent = false;
         this.isRead = false;
     }
-    public ChatMessage(String messageId, String senderId, String message, long timestamp, boolean isDelivered, boolean isSent, boolean isRead) {
-        this.messageId = messageId;
+    public ChatMessage(String senderId, String message, long timestamp, boolean isDelivered, boolean isSent, boolean isRead) {
         this.senderId = senderId;
         this.message = message;
         this.timestamp = timestamp;
@@ -35,12 +33,6 @@ public class ChatMessage {
     //endregion Methods
 
     //region Getter/Setter
-    public String getMessageId() {
-        return messageId;
-    }
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
     public String getSenderId() {
         return senderId;
     }

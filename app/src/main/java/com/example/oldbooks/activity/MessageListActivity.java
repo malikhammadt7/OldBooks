@@ -1,10 +1,12 @@
 package com.example.oldbooks.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -19,7 +21,11 @@ import com.example.oldbooks.manager.UserManager;
 import com.example.oldbooks.model.ChatMessage;
 import com.example.oldbooks.model.ChatRoom;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageListActivity extends AppCompatActivity {
@@ -44,14 +50,26 @@ public class MessageListActivity extends AppCompatActivity {
         activity = this;
         AppController.getInstance().setCurrentActivity(activity);
 
+        List<ChatRoom> chatRooms = new ArrayList<>();
+        chatRooms.addAll(AppController.getInstance().getChatRooms());
         username = AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
-
-        FirebaseRecyclerOptions<ChatRoom> options =
-                new FirebaseRecyclerOptions.Builder<ChatRoom>()
-                        .setQuery(AppController.getInstance().getManager(FirebaseManager.class).showChatList(username), ChatRoom.class)
-                        .build();
-
-        messageListAdapter = new MessageListAdapter(this, username, options);
+        Log.d(TAG, "username: " + username);
+        Log.d(TAG, "chatRooms: " + chatRooms);
+//        AppController.getInstance().getManager(FirebaseManager.class).showChatList(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//            @Override
+//            public void onComplete(@androidx.annotation.NonNull Task<DataSnapshot> task) {
+//                if(task.isSuccessful()){
+//                    Log.d(TAG, "onCreate: task " + task.getResult());
+//                    for (DataSnapshot chatRoomSnapshot : task.getResult().getChildren()) {
+//                        chatroomIds.add(chatRoomSnapshot.toString());
+//                    }
+//
+//                    Log.d(TAG, "onCreate: chatroomIds " + chatroomIds);
+//                }
+//            }
+//        });
+        messageListAdapter = new MessageListAdapter(this, username, chatRooms);
+        actBinding.recChat.setLayoutManager(new LinearLayoutManager(this));
         actBinding.recChat.setAdapter(messageListAdapter);
         updateVisibility();
     }
@@ -69,22 +87,6 @@ public class MessageListActivity extends AppCompatActivity {
     //endregion Methods
 
     //region Extras
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (messageListAdapter != null) {
-            messageListAdapter.startListening();
-        }
-        updateVisibility();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (messageListAdapter != null) {
-            messageListAdapter.stopListening();
-        }
-    }
     //endregion Extras
 
 }

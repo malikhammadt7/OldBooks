@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.oldbooks.AppController;
 import com.example.oldbooks.Manager;
+import com.example.oldbooks.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,19 +32,12 @@ public class CoinManager extends Manager{
 
     @Override
     public void Initialize() {
-        databaseReference.child("users").child("dummyuser").child("coin").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    totalCoins = dataSnapshot.getValue(Integer.class);
-                } else {
-                    totalCoins = 0;
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) { }
-        });
+        AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
+        totalCoins = AppController.getInstance().getManager(UserManager.class).getUser().getCoin();
         setInitialized(true);
+
+        Log.d(TAG, "LoadChatRooms");
+        AppController.getInstance().LoadChatRooms();
     }
 
     public int getTotalCoins()

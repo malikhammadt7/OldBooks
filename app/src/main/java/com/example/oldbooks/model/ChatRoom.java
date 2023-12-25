@@ -21,6 +21,10 @@ public class ChatRoom implements Serializable {
     public ChatRoom() {
         this.lastSenderId = AppController.getInstance().getManager(UserManager.class).getUser().getUsername();
         this.lastMessageTimestamp = AppController.getCurrentTimestamp();
+        this.messages = new ArrayList<>();
+        this.lastMessageTimestamp = 0;
+        this.postId = "";
+        this.lastMessage = "";
     }
 
     public ChatRoom(String chatroomId, List<String> userIds, List<ChatMessage> messages, long lastMessageTimestamp, String postId, String lastSenderId, String lastMessage) {

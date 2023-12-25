@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="text"
-                android:text="User Id" />
+                android:hint="User Id" />
 
             <EditText
                 android:id="@+id/edtPswd"
@@ -117,7 +117,7 @@
                 android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Password" />
+                android:hint="Password" />
 
             <Button
                 android:id="@+id/btnLogin"
